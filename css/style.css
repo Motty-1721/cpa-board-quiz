@@ -189,13 +189,15 @@ main#view {
   flex-direction: column;
   align-items: center;
   gap: 2px;
-  padding: 6px 2px;
+  padding: 6px 1px;
   border-radius: 12px;
-  font-size: .62rem;
+  font-size: .58rem;
   font-weight: 700;
   color: var(--text-muted);
   text-decoration: none;
-  letter-spacing: .02em;
+  letter-spacing: .01em;
+  min-width: 0;
+  white-space: nowrap;
 }
 .bottomnav a .ico { font-size: 1.15rem; line-height: 1; }
 .bottomnav a.active { color: var(--primary); }
@@ -376,6 +378,100 @@ main#view {
   border-color: var(--primary);
   color: var(--on-primary);
 }
+
+/* ── Module chips (subject → module pickers) ──────────────────── */
+.modrowlist { display: flex; flex-wrap: wrap; gap: 8px; }
+.modchip {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  padding: 9px 13px;
+  border-radius: 12px;
+  border: 1.5px solid var(--border);
+  background: var(--surface);
+  text-align: left;
+  transition: all .13s ease;
+}
+.modchip:hover { border-color: var(--primary); }
+.modchip.on {
+  border-color: var(--primary);
+  background: var(--primary-soft);
+}
+.modchip .ml { font-weight: 700; font-size: .84rem; }
+.modchip.on .ml { color: var(--primary); }
+.modchip .mc { font-size: .68rem; color: var(--text-muted); font-variant-numeric: tabular-nums; }
+
+/* ── Flashcards ───────────────────────────────────────────────── */
+.card3d {
+  display: block;
+  width: 100%;
+  min-height: 300px;
+  perspective: 1400px;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 4px 0 6px;
+}
+.card3d .cface {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 26px 22px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transition: transform .5s cubic-bezier(.3,.9,.4,1);
+  box-shadow: var(--shadow);
+}
+.card3d { position: relative; }
+.card3d .cfront { background: var(--surface); }
+.card3d .cback {
+  background: linear-gradient(150deg, var(--primary) 0%, #9d6bf0 100%);
+  color: #fff;
+  transform: rotateY(180deg);
+  border-color: transparent;
+}
+.card3d.flipped .cfront { transform: rotateY(-180deg); }
+.card3d.flipped .cback { transform: rotateY(0deg); }
+.card3d .ctext {
+  font-size: 1.12rem;
+  font-weight: 700;
+  line-height: 1.55;
+  text-align: center;
+  overflow-y: auto;
+}
+.card3d .clabel {
+  font-size: .68rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: .09em;
+  color: var(--text-muted);
+}
+.card3d .cback .clabel { color: rgba(255,255,255,.75); }
+.card3d .chint {
+  font-size: .78rem;
+  background: rgba(255,255,255,.18);
+  border-radius: 99px;
+  padding: 5px 12px;
+  text-align: center;
+}
+.card3d .cfliphint {
+  font-size: .7rem;
+  color: var(--text-muted);
+  letter-spacing: .05em;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+/* The flip container needs an explicit height driver */
+.card3d::after { content: ""; display: block; padding-top: 46%; }
 
 /* ── Quiz ─────────────────────────────────────────────────────── */
 .quizhead {
@@ -571,6 +667,7 @@ main#view {
 .hero .greeting-sub { font-size: .8rem; opacity: .85; margin-top: 3px; }
 
 .quickrow { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+@media (min-width: 640px) { .quickrow { grid-template-columns: repeat(5, 1fr); } }
 .quickbtn {
   display: flex;
   flex-direction: column;
@@ -587,8 +684,7 @@ main#view {
 .quickbtn .ico { font-size: 1.3rem; }
 .quickbtn .t { font-weight: 800; font-size: .88rem; }
 .quickbtn .s { font-size: .72rem; color: var(--text-muted); }
-.quickbtn.span2 { grid-column: span 2; flex-direction: row; align-items: center; gap: 12px; }
-@media (min-width: 560px) { .quickrow { grid-template-columns: repeat(4, 1fr); } .quickbtn.span2 { grid-column: span 2; flex-direction: column; text-align: center; } }
+.quickbtn.span2 { grid-column: span 2; }
 
 .setrow {
   display: flex;

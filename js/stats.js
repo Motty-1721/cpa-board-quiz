@@ -72,48 +72,42 @@ window.App = window.App || {};
   }
 
   /* ── Aggregations ───────────────────────────────────────────── */
-  function materialSummary() {
-    // One row per reviewer (PDF set)
-    var map = {}, order = [];
-    bank().forEach(function (q) {
-      var m = q.material || "Unsorted";
-      if (!map[m]) { map[m] = { material: m, total: 0, seen: 0, correct: 0, mastered: 0, attempts: 0 }; order.push(m); }
-      var r = map[m];
-      r.total++;
-      var st = App.state.questionStats[q.id];
-      if (st) {
-        if (st.seen > 0) r.seen++;
-        r.attempts += st.seen;
-        r.correct += st.correct;
-        if (st.mastered) r.mastered++;
-      }
-    });
-    return order.map(function (m) {
-      var r = map[m];
-      r.accuracy = r.attempts > 0 ? Math.round(r.correct / r.attempts * 100) : null;
-      return r;
-    });
-  }
-
+  // One row per SUBJECT (= one PDF), with its module breakdown
   function subjectSummary() {
     var map = {}, order = [];
     bank().forEach(function (q) {
-      var s = q.subject || "General";
-      if (!map[s]) { map[s] = { subject: s, total: 0, attempts: 0, correct: 0, seen: 0 }; order.push(s); }
+      var s = q.subject || "Unsorted";
+      if (!map[s]) { map[s] = { subject: s, total: 0, seen: 0, correct: 0, mastered: 0, attempts: 0, modules: {} }; order.push(s); }
       var r = map[s];
       r.total++;
+      var mod = q.module || "General";
+      if (!r.modules[mod]) r.modules[mod] = { module: mod, total: 0, seen: 0, attempts: 0, correct: 0, mastered: 0 };
+      var mr = r.modules[mod];
+      mr.total++;
       var st = App.state.questionStats[q.id];
       if (st) {
-        if (st.seen > 0) r.seen++;
-        r.attempts += st.seen;
-        r.correct += st.correct;
+        if (st.seen > 0) { r.seen++; mr.seen++; }
+        r.attempts += st.seen; mr.attempts += st.seen;
+        r.correct += st.correct; mr.correct += st.correct;
+        if (st.mastered) { r.mastered++; mr.mastered++; }
       }
     });
     return order.map(function (s) {
       var r = map[s];
       r.accuracy = r.attempts > 0 ? Math.round(r.correct / r.attempts * 100) : null;
+      r.moduleList = Object.keys(r.modules).map(function (m) {
+        var mm = r.modules[m];
+        mm.accuracy = mm.attempts > 0 ? Math.round(mm.correct / mm.attempts * 100) : null;
+        return mm;
+      });
       return r;
     });
+  }
+
+  // Module rows for one subject, for the pickers
+  function moduleSummary(subject) {
+    var subj = subjectSummary().filter(function (r) { return r.subject === subject; })[0];
+    return subj ? subj.moduleList : [];
   }
 
   function shortSubject(full) {
@@ -199,8 +193,8 @@ window.App = window.App || {};
     recordAnswer: recordAnswer,
     addSession: addSession,
     streakInfo: streakInfo,
-    materialSummary: materialSummary,
     subjectSummary: subjectSummary,
+    moduleSummary: moduleSummary,
     shortSubject: shortSubject,
     weakTopics: weakTopics,
     drillPool: drillPool,

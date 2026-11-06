@@ -22,21 +22,24 @@ window.App = window.App || {};
     return a;
   }
 
-  function poolFor(material) {
+  function poolFor(subject, module) {
     return Q().filter(function (q) {
-      return !material || (q.material || "Unsorted") === material;
+      var subjOk = !subject || (q.subject || "Unsorted") === subject;
+      var modOk = !module || (q.module || "General") === module;
+      return subjOk && modOk;
     });
   }
 
   /* ── Start a session ────────────────────────────────────────── */
-  // opts: { mode, material (null = all reviewers mixed), count, minutes }
+  // opts: { mode, subject (null = all subjects), module (null = all modules), count, minutes }
   function startSession(opts) {
     var pool;
     if (opts.mode === "drill") {
       pool = App.Stats.drillPool();
-      if (opts.material) pool = pool.filter(function (q) { return (q.material || "Unsorted") === opts.material; });
+      if (opts.subject) pool = pool.filter(function (q) { return (q.subject || "Unsorted") === opts.subject; });
+      if (opts.module) pool = pool.filter(function (q) { return (q.module || "General") === opts.module; });
     } else {
-      pool = poolFor(opts.material);
+      pool = poolFor(opts.subject, opts.module);
     }
 
     if (!pool.length) return { ok: false, reason: "empty" };
@@ -48,7 +51,8 @@ window.App = window.App || {};
     App.session = {
       id: "q" + now,
       mode: opts.mode,
-      material: opts.material || null,
+      subject: opts.subject || null,
+      module: opts.module || null,
       qids: picked.map(function (q) { return q.id; }),
       index: 0,
       answers: {},   // qid -> chosen index
@@ -157,9 +161,10 @@ window.App = window.App || {};
     var g = grade();
     if (answered > 0) {
       var label = s.mode === "exam" ? "Mock Exam" : s.mode === "drill" ? "Drill" : "Practice";
+      var scope = s.subject ? App.Stats.shortSubject(s.subject) + (s.module ? " · " + s.module : "") : "All subjects";
       App.Stats.addSession({
         mode: s.mode,
-        set: s.material || "All reviewers",
+        set: scope,
         setLabel: label,
         total: s.qids.length,
         answered: answered,

@@ -17,6 +17,7 @@ window.App = window.App || {};
       version: 1,
       settings: { theme: "system" }, // "system" | "light" | "dark"
       questionStats: {},             // qid -> { seen, correct, streak, lastResult, lastSeen, mastered }
+      cardStats: {},                 // cardId -> { seen, known, lastAt }
       sessions: [],                  // [{ id, date, mode, set, total, answered, correct, durationSec }]
       studyDays: {}                  // "YYYY-MM-DD" -> true (any answer recorded that day)
     };
@@ -31,6 +32,7 @@ window.App = window.App || {};
       // Merge so new fields survive app updates
       s.settings = Object.assign(d.settings, s.settings || {});
       s.questionStats = s.questionStats || {};
+      s.cardStats = s.cardStats || {};
       s.sessions = Array.isArray(s.sessions) ? s.sessions : [];
       s.studyDays = s.studyDays || {};
       s.version = 1;
@@ -112,6 +114,7 @@ window.App = window.App || {};
   function resetAll() {
     localStorage.removeItem(SESSION_KEY);
     localStorage.removeItem(STATE_KEY);
+    localStorage.removeItem("cpaQuiz.cards.v1");
     App.state = defaultState();
     App.session = null;
   }

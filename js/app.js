@@ -6,10 +6,15 @@ window.App = window.App || {};
 (function (App) {
   "use strict";
 
-  var UI = App.UI, Stats = App.Stats, Quiz = App.Quiz, Storage = App.Storage, esc = App.UI.esc;
+  var UI = App.UI, Stats = App.Stats, Quiz = App.Quiz, Cards = App.Cards, Storage = App.Storage, esc = App.UI.esc;
 
-  // Transient (non-persisted) UI selections, e.g. chosen reviewer on setup screens
-  App.uiState = { practiceSel: null, practiceCount: 10, examSel: null, examCount: 30, examMin: null, showGrid: false, reviewMode: false };
+  // Transient (non-persisted) UI selections, e.g. chosen subject/module on setup screens
+  App.uiState = {
+    practiceSubject: null, practiceModule: null, practiceCount: 10,
+    examSubject: null, examModule: null, examCount: 30, examMin: null,
+    cardsSubject: null, cardsModule: null, cardsOnlyUnknown: false,
+    showGrid: false, reviewMode: false
+  };
 
   var viewTimers = [];
   function clearTimers() {
@@ -60,6 +65,8 @@ window.App = window.App || {};
     "quiz": renderQuiz,
     "results": renderResults,
     "summary": renderSummary,
+    "cards": renderCardsPicker,
+    "study": renderCardStudy,
     "stats": renderStats,
     "tips": renderTips,
     "settings": renderSettings
@@ -80,6 +87,7 @@ window.App = window.App || {};
     // Guards
     if ((r === "quiz" || r === "results" || r === "summary") && !App.session) { go("dashboard"); return; }
     if (r === "quiz" && App.session.finished) { go(App.session.mode === "exam" ? "results" : "summary"); return; }
+    if (r === "study" && !App.cardSession) { go("cards"); return; }
     if (!fn) { go("dashboard"); return; }
 
     document.querySelectorAll(".topnav a, .bottomnav a").forEach(function (a) {
@@ -107,19 +115,37 @@ window.App = window.App || {};
     return '<span class="' + cls + '">' + pct + "%</span>";
   }
 
-  function materialList(includeAll) {
+  function subjectList() {
     var names = [];
     (window.QUESTION_BANK || []).forEach(function (q) {
-      var m = q.material || "Unsorted";
-      if (names.indexOf(m) === -1) names.push(m);
+      var s = q.subject || "Unsorted";
+      if (names.indexOf(s) === -1) names.push(s);
     });
     names.sort(function (a, b) { return a.localeCompare(b); });
-    return includeAll ? [null].concat(names) : names;
+    return names;
   }
 
-  function setCounts(material) {
-    var pool = Quiz.poolFor(material);
-    return { total: pool.length, unseen: pool.filter(function (q) { return !(App.state.questionStats[q.id] && App.state.questionStats[q.id].seen > 0); }).length };
+  function moduleList(subject) {
+    var mods = [];
+    (window.QUESTION_BANK || []).forEach(function (q) {
+      if (subject && (q.subject || "Unsorted") !== subject) return;
+      var m = q.module || "General";
+      if (mods.indexOf(m) === -1) mods.push(m);
+    });
+    return mods.sort(function (a, b) { return a.localeCompare(b); });
+  }
+
+  function poolCounts(subject, module) {
+    var pool = Quiz.poolFor(subject, module);
+    return {
+      total: pool.length,
+      unseen: pool.filter(function (q) { return !(App.state.questionStats[q.id] && App.state.questionStats[q.id].seen > 0); }).length
+    };
+  }
+
+  function scopeLabel(s) {
+    if (!s) return "All subjects";
+    return Stats.shortSubject(s.subject) + (s.module ? " · " + s.module : "");
   }
 
   /* ══════════════════════════ DASHBOARD ══════════════════════ */
@@ -152,20 +178,21 @@ window.App = window.App || {};
         '<button class="quickbtn" id="qk-practice"><span class="ico">⚡</span><span class="t">Quick 10</span><span class="s">Mixed practice</span></button>' +
         '<button class="quickbtn" id="qk-exam"><span class="ico">⏱️</span><span class="t">Mock Exam</span><span class="s">Timed simulation</span></button>' +
         '<button class="quickbtn" id="qk-drill"><span class="ico">🎯</span><span class="t">Drill' + (drillN ? " (" + drillN + ")" : "") + '</span><span class="s">Missed questions</span></button>' +
+        '<button class="quickbtn" id="qk-cards"><span class="ico">🃏</span><span class="t">Flashcards</span><span class="s">Flip & recall</span></button>' +
         '<button class="quickbtn" id="qk-tips"><span class="ico">💡</span><span class="t">Study Tips</span><span class="s">How to review smart</span></button>' +
       "</div>";
 
-    // Reviewer progress
-    var mats = Stats.materialSummary();
-    html += '<div class="section-title">Your reviewers</div><div class="card">';
-    mats.forEach(function (m) {
+    // Subject progress
+    var subs = Stats.subjectSummary();
+    html += '<div class="section-title">Your subjects</div><div class="card">';
+    subs.forEach(function (m) {
       var pctSeen = m.total ? Math.round(m.seen / m.total * 100) : 0;
       html +=
-        '<div class="setrow" data-material="' + esc(m.material) + '" style="cursor:pointer">' +
-          '<div class="doc">📄</div>' +
+        '<div class="setrow" data-subject="' + esc(m.subject) + '" style="cursor:pointer">' +
+          '<div class="doc">📘</div>' +
           '<div class="info">' +
-            '<div class="name">' + esc(m.material) + "</div>" +
-            '<div class="nums">' + m.seen + "/" + m.total + " answered · " + m.mastered + " mastered</div>" +
+            '<div class="name">' + esc(m.subject) + "</div>" +
+            '<div class="nums">' + m.moduleList.length + " module" + (m.moduleList.length > 1 ? "s" : "") + " · " + m.seen + "/" + m.total + " answered · " + m.mastered + " mastered</div>" +
             '<div class="bar mt8"><i style="width:' + pctSeen + '%"></i></div>' +
           "</div>" +
           accuracyChip(m.accuracy) +
@@ -202,15 +229,17 @@ window.App = window.App || {};
     main.innerHTML = html;
 
     document.getElementById("qk-practice").onclick = function () {
-      Quiz.startSession({ mode: "practice", material: null, count: 10 });
+      Quiz.startSession({ mode: "practice", subject: null, count: 10 });
       go("quiz");
     };
     document.getElementById("qk-exam").onclick = function () { go("exam"); };
     document.getElementById("qk-drill").onclick = function () { go("drill"); };
+    document.getElementById("qk-cards").onclick = function () { go("cards"); };
     document.getElementById("qk-tips").onclick = function () { go("tips"); };
     main.querySelectorAll(".setrow").forEach(function (row) {
       row.onclick = function () {
-        App.uiState.practiceSel = row.getAttribute("data-material");
+        App.uiState.practiceSubject = row.getAttribute("data-subject");
+        App.uiState.practiceModule = null;
         go("practice");
       };
     });
@@ -220,31 +249,42 @@ window.App = window.App || {};
   function renderPracticeSetup(main) {
     if (!Q().length) { emptyBank(main); return; }
     var us = App.uiState;
-    var sel = us.practiceSel; // null = All reviewers
-    var counts = setCounts(sel);
+    var subj = us.practiceSubject; // null = all subjects
+    var mod = us.practiceModule;   // null = all modules of that subject
+    var counts = poolCounts(subj, mod);
     var countOpts = [10, 20, 0]; // 0 = all
     var effCount = us.practiceCount === 0 ? counts.total : Math.min(us.practiceCount, counts.total);
 
     var html = "<h2 style='font-size:1.2rem;margin:6px 2px 14px'>Practice mode ⚡</h2>" +
-      '<p class="muted" style="margin:-8px 2px 16px">Instant feedback and explanations after every question. Stats update as you go.</p>';
+      '<p class="muted" style="margin:-8px 2px 16px">Pick a subject and module. Instant feedback and explanations after every question.</p>';
 
-    html += '<div class="setlist" id="setlist">';
-    materialList(true).forEach(function (m) {
-      var name = m === null ? "All reviewers (mixed)" : m;
-      var c = setCounts(m);
-      var isSel = (sel === m);
+    html += '<div class="section-title" style="margin-top:0">1 · Choose subject</div><div class="setlist" id="setlist">';
+    var subs = [null].concat(subjectList());
+    subs.forEach(function (s) {
+      var name = s === null ? "All subjects (mixed)" : s;
+      var c = poolCounts(s, null);
+      var modCount = s === null ? subjectList().length : moduleList(s).length;
       html +=
-        '<button class="setcard' + (isSel ? " selected" : "") + '" data-m="' + (m === null ? "" : esc(m)) + '">' +
-          '<div class="doc">📚</div>' +
+        '<button class="setcard' + (subj === s ? " selected" : "") + '" data-s="' + (s === null ? "" : esc(s)) + '">' +
+          '<div class="doc">' + (s === null ? "🔀" : "📘") + "</div>" +
           '<div class="meta">' +
             '<div class="name">' + esc(name) + "</div>" +
-            '<div class="sub"><span>' + c.total + ' questions</span><span>' + c.unseen + " untouched</span></div>" +
+            '<div class="sub"><span>' + c.total + ' questions</span><span>' + (s === null ? modCount + " subjects" : modCount + " modules") + "</span></div>" +
             '<div class="bar"><i style="width:' + (c.total ? Math.round((c.total - c.unseen) / c.total * 100) : 0) + '%"></i></div>' +
           "</div>" +
           '<div class="tick" aria-hidden="true">✓</div>' +
         "</button>";
     });
     html += "</div>";
+
+    if (subj) {
+      html += '<div class="section-title">2 · Choose module</div><div class="card"><div class="modrowlist">';
+      html += moduleChip(null, "All modules", poolCounts(subj, null), mod === null);
+      moduleList(subj).forEach(function (m) {
+        html += moduleChip(m, m, poolCounts(subj, m), mod === m);
+      });
+      html += "</div></div>";
+    }
 
     html +=
       '<div class="card mt16">' +
@@ -263,7 +303,14 @@ window.App = window.App || {};
 
     main.querySelectorAll(".setcard").forEach(function (card) {
       card.onclick = function () {
-        us.practiceSel = card.getAttribute("data-m") || null;
+        us.practiceSubject = card.getAttribute("data-s") || null;
+        us.practiceModule = null;
+        renderPracticeSetup(main);
+      };
+    });
+    main.querySelectorAll(".modchip").forEach(function (chip) {
+      chip.onclick = function () {
+        us.practiceModule = chip.getAttribute("data-mod") || null;
         renderPracticeSetup(main);
       };
     });
@@ -274,18 +321,27 @@ window.App = window.App || {};
       };
     });
     document.getElementById("startbtn").onclick = function () {
-      var r = Quiz.startSession({ mode: "practice", material: us.practiceSel, count: us.practiceCount || 0 });
+      var r = Quiz.startSession({ mode: "practice", subject: us.practiceSubject, module: us.practiceModule, count: us.practiceCount || 0 });
       if (!r.ok) { UI.toast("No questions available for that selection."); return; }
       go("quiz");
     };
+  }
+
+  // A selectable module pill with counts; used by practice/exam/cards pickers
+  function moduleChip(mod, label, counts, isSel) {
+    return '<button class="modchip' + (isSel ? " on" : "") + '" data-mod="' + (mod === null ? "" : esc(mod)) + '">' +
+      '<span class="ml">' + esc(label) + "</span>" +
+      '<span class="mc">' + counts.total + " Q" + (counts.unseen === counts.total ? "" : " · " + (counts.total - counts.unseen) + " done") + "</span>" +
+      "</button>";
   }
 
   /* ══════════════════════════ EXAM SETUP ═════════════════════ */
   function renderExamSetup(main) {
     if (!Q().length) { emptyBank(main); return; }
     var us = App.uiState;
-    var sel = us.examSel;
-    var counts = setCounts(sel);
+    var subj = us.examSubject;
+    var mod = us.examModule;
+    var counts = poolCounts(subj, mod);
     var maxN = counts.total;
     var countOpts = [30, 60, 90].filter(function (n) { return n <= maxN; });
     if (!countOpts.length) countOpts = [maxN];
@@ -295,21 +351,30 @@ window.App = window.App || {};
     if (us.examMin == null || us.examMinFor !== effCount) { us.examMin = defaultMin; us.examMinFor = effCount; }
 
     var html = "<h2 style='font-size:1.2rem;margin:6px 2px 14px'>Mock exam mode ⏱️</h2>" +
-      '<p class="muted" style="margin:-8px 2px 16px">A simulation of the real thing — the timer runs, feedback is hidden until you submit, and every question gets reviewed at the end. The CPA board passing mark is 75%.</p>';
+      '<p class="muted" style="margin:-8px 2px 16px">A simulation of the real thing — pick a subject, set the clock, and review everything at the end. The CPA board passing mark is 75%.</p>';
 
-    html += '<div class="setlist" id="setlist">';
-    materialList(true).forEach(function (m) {
-      var name = m === null ? "All reviewers (mixed)" : m;
-      var c = setCounts(m);
+    html += '<div class="section-title" style="margin-top:0">1 · Choose subject</div><div class="setlist" id="setlist">';
+    [null].concat(subjectList()).forEach(function (s) {
+      var name = s === null ? "All subjects (mixed)" : s;
+      var c = poolCounts(s, null);
       html +=
-        '<button class="setcard' + (sel === m ? " selected" : "") + '" data-m="' + (m === null ? "" : esc(m)) + '">' +
-          '<div class="doc">📄</div>' +
+        '<button class="setcard' + (subj === s ? " selected" : "") + '" data-s="' + (s === null ? "" : esc(s)) + '">' +
+          '<div class="doc">' + (s === null ? "🔀" : "📘") + "</div>" +
           '<div class="meta"><div class="name">' + esc(name) + "</div>" +
           '<div class="sub"><span>' + c.total + " questions available</span></div></div>" +
           '<div class="tick" aria-hidden="true">✓</div>' +
         "</button>";
     });
     html += "</div>";
+
+    if (subj) {
+      html += '<div class="section-title">2 · Choose module</div><div class="card"><div class="modrowlist">';
+      html += moduleChip(null, "All modules", poolCounts(subj, null), mod === null);
+      moduleList(subj).forEach(function (m) {
+        html += moduleChip(m, m, poolCounts(subj, m), mod === m);
+      });
+      html += "</div></div>";
+    }
 
     html += '<div class="card mt16">' +
       '<div class="formrow"><div><div class="lab">Number of questions</div></div>' +
@@ -327,7 +392,15 @@ window.App = window.App || {};
 
     main.querySelectorAll(".setcard").forEach(function (card) {
       card.onclick = function () {
-        us.examSel = card.getAttribute("data-m") || null;
+        us.examSubject = card.getAttribute("data-s") || null;
+        us.examModule = null;
+        us.examMin = null;
+        renderExamSetup(main);
+      };
+    });
+    main.querySelectorAll(".modchip").forEach(function (chip) {
+      chip.onclick = function () {
+        us.examModule = chip.getAttribute("data-mod") || null;
         us.examMin = null;
         renderExamSetup(main);
       };
@@ -347,7 +420,7 @@ window.App = window.App || {};
     };
     document.getElementById("startexam").onclick = function () {
       var min = parseInt(document.getElementById("exammin").value, 10) || Math.ceil(effCount * 1.5);
-      var r = Quiz.startSession({ mode: "exam", material: us.examSel, count: us.examCount, minutes: min });
+      var r = Quiz.startSession({ mode: "exam", subject: us.examSubject, module: us.examModule, count: us.examCount, minutes: min });
       if (!r.ok) { UI.toast("No questions available for that selection."); return; }
       go("quiz");
     };
@@ -408,7 +481,7 @@ window.App = window.App || {};
 
     var i = s.index, n = s.qids.length;
     var modeLabel = s.mode === "exam" ? "Mock exam" : s.mode === "drill" ? "Drill" : "Practice";
-    var setName = s.material || "All reviewers";
+    var setName = scopeLabel(s);
 
     var head =
       '<div class="quizhead">' +
@@ -610,7 +683,7 @@ window.App = window.App || {};
       '<div class="card scorewrap">' +
         UI.scoreRing(g.pct, passed ? "--success" : "--danger") +
         '<div class="verdict ' + (passed ? "pass" : "fail") + '">' + (passed ? "Above the 75% passing mark 🎉" : "Below 75% — keep going 💪") + "</div>" +
-        '<div class="scoremeta">' + g.correct + " of " + g.total + " correct · " + esc(s.material || "All reviewers") + " · " + Stats.fmtDuration(usedSec) + " used</div>" +
+        '<div class="scoremeta">' + g.correct + " of " + g.total + " correct · " + esc(scopeLabel(s)) + " · " + Stats.fmtDuration(usedSec) + " used</div>" +
         '<div class="row mt16" style="justify-content:center;gap:10px">' +
           '<button class="btn btn-primary" id="reviewbtn">Review answers</button>' +
           '<button class="btn btn-ghost" id="homebtn">Done</button>' +
@@ -685,7 +758,7 @@ window.App = window.App || {};
       '<div class="card scorewrap">' +
         UI.scoreRing(g.pct, g.pct >= 75 ? "--success" : "--primary") +
         '<div class="verdict">' + (s.mode === "drill" ? "Drill complete" : "Session complete") + "</div>" +
-        '<div class="scoremeta">' + g.correct + " of " + answered + " answered correctly · " + esc(s.material || "All reviewers") + "</div>" +
+        '<div class="scoremeta">' + g.correct + " of " + answered + " answered correctly · " + esc(scopeLabel(s)) + "</div>" +
         (remainingDrill ? '<div class="scoremeta">🎯 ' + remainingDrill + " still in the drill pool</div>" : '<div class="scoremeta">🎉 Drill pool is empty — everything mastered!</div>') +
         '<div class="row mt16" style="justify-content:center;gap:10px;flex-wrap:wrap">' +
           '<button class="btn btn-primary" id="againbtn">Again</button>' +
@@ -697,7 +770,7 @@ window.App = window.App || {};
 
     document.getElementById("againbtn").onclick = function () {
       // startSession replaces the finished session with a fresh one
-      var r = Quiz.startSession({ mode: s.mode, material: s.material, count: s.qids.length });
+      var r = Quiz.startSession({ mode: s.mode, subject: s.subject, module: s.module, count: s.qids.length });
       if (r.ok) go("quiz"); else go("dashboard");
     };
     var db = document.getElementById("drillbtn");
@@ -735,16 +808,24 @@ window.App = window.App || {};
     html += '<div class="section-title">Consistency — last 8 weeks</div><div class="card">' + UI.heatmap() +
       '<p class="muted mt8">🔥 ' + streak.daysStudied + " day" + (streak.daysStudied === 1 ? "" : "s") + " studied so far. Consistency beats cramming — a little every day compounds fast.</p></div>";
 
-    // Per reviewer
-    html += '<div class="section-title">Per reviewer</div><div class="card">';
-    Stats.materialSummary().forEach(function (m) {
+    // Per subject (with module detail)
+    html += '<div class="section-title">Per subject</div><div class="card">';
+    Stats.subjectSummary().forEach(function (m) {
       var pctSeen = m.total ? Math.round(m.seen / m.total * 100) : 0;
       html +=
-        '<div class="setrow"><div class="doc">📄</div>' +
-        '<div class="info"><div class="name">' + esc(m.material) + "</div>" +
+        '<div class="setrow"><div class="doc">📘</div>' +
+        '<div class="info"><div class="name">' + esc(m.subject) + "</div>" +
         '<div class="nums">' + m.seen + "/" + m.total + " answered · " + m.mastered + " mastered</div>" +
         '<div class="bar mt8"><i style="width:' + pctSeen + '%"></i></div></div>' +
         accuracyChip(m.accuracy) + "</div>";
+      m.moduleList.forEach(function (mm) {
+        if (!mm.attempts) return; // only show modules with activity
+        html +=
+          '<div class="setrow" style="padding-left:14px"><div class="doc" style="font-size:.8rem;width:28px;height:28px">↳</div>' +
+          '<div class="info"><div class="name" style="font-weight:600;font-size:.8rem">' + esc(mm.module) + "</div>" +
+          '<div class="nums">' + mm.correct + "/" + mm.attempts + " attempts" + (mm.mastered ? " · " + mm.mastered + " mastered" : "") + "</div></div>" +
+          accuracyChip(mm.accuracy) + "</div>";
+      });
     });
     html += "</div>";
 
@@ -778,6 +859,189 @@ window.App = window.App || {};
     }
 
     main.innerHTML = html;
+  }
+
+  /* ══════════════════════════ FLASHCARDS ══════════════════════ */
+  function cardModChip(mod, label, total, known, isSel) {
+    return '<button class="modchip' + (isSel ? " on" : "") + '" data-mod="' + (mod === null ? "" : esc(mod)) + '">' +
+      '<span class="ml">' + esc(label) + "</span>" +
+      '<span class="mc">' + known + "/" + total + " known</span>" +
+      "</button>";
+  }
+
+  function renderCardsPicker(main) {
+    if (!Cards.all().length) {
+      main.innerHTML = '<div class="card"><div class="empty"><div class="big">🃏</div>' +
+        "<p><b>No flashcards yet.</b></p>" +
+        '<p class="muted mt8">Flashcards are generated from the study materials together with the questions.</p></div></div>';
+      return;
+    }
+    var us = App.uiState;
+    var subj = us.cardsSubject, mod = us.cardsModule;
+
+    var html = "<h2 style='font-size:1.2rem;margin:6px 2px 14px'>Flashcards 🃏</h2>" +
+      '<p class="muted" style="margin:-8px 2px 16px">Flip each card in your head first, then reveal. Mark what you know — anything you don\'t returns until you do.</p>';
+
+    html += '<div class="section-title" style="margin-top:0">1 · Choose subject</div><div class="setlist">';
+    [null].concat(subjectList()).forEach(function (s) {
+      var name = s === null ? "All subjects (mixed)" : s;
+      var t = Cards.deckTotals(s);
+      if (!t.total) return;
+      html +=
+        '<button class="setcard' + (subj === s ? " selected" : "") + '" data-s="' + (s === null ? "" : esc(s)) + '">' +
+          '<div class="doc">' + (s === null ? "🔀" : "📘") + "</div>" +
+          '<div class="meta">' +
+            '<div class="name">' + esc(name) + "</div>" +
+            '<div class="sub"><span>' + t.total + " cards</span><span>" + t.known + " known</span></div>" +
+            '<div class="bar success"><i style="width:' + (t.total ? Math.round(t.known / t.total * 100) : 0) + '%"></i></div>' +
+          "</div>" +
+          '<div class="tick" aria-hidden="true">✓</div>' +
+        "</button>";
+    });
+    html += "</div>";
+
+    if (subj) {
+      html += '<div class="section-title">2 · Choose module</div><div class="card"><div class="modrowlist">';
+      var allMods = Cards.deckSummary(subj);
+      var allTotal = allMods.reduce(function (a, m) { return a + m.total; }, 0);
+      var allKnown = allMods.reduce(function (a, m) { return a + m.known; }, 0);
+      html += cardModChip(null, "All modules", allTotal, allKnown, mod === null);
+      allMods.forEach(function (m) {
+        html += cardModChip(m.module, m.module, m.total, m.known, mod === m.module);
+      });
+      html += "</div></div>";
+    }
+
+    var deckSize = Cards.deckFor(subj, mod).filter(function (c) {
+      return !(us.cardsOnlyUnknown && App.state.cardStats[c.id] && App.state.cardStats[c.id].known);
+    }).length;
+
+    html += '<div class="card mt16">' +
+      '<div class="formrow" style="border:none;padding-top:0">' +
+        "<div><div class='lab'>Only cards I haven't learned</div><div class='hint'>Skips everything you already marked as known</div></div>" +
+        '<div class="seg" id="cardsmode">' +
+          '<button data-v="all" class="' + (!us.cardsOnlyUnknown ? "on" : "") + '">All</button>' +
+          '<button data-v="unknown" class="' + (us.cardsOnlyUnknown ? "on" : "") + '">Unknown</button>' +
+        "</div>" +
+      "</div>" +
+      '<button class="btn btn-primary btn-lg btn-block" id="startcards"' + (deckSize ? "" : " disabled") + ">Start deck — " + deckSize + " cards</button>" +
+    "</div>";
+
+    main.innerHTML = html;
+
+    main.querySelectorAll(".setcard").forEach(function (card) {
+      card.onclick = function () {
+        us.cardsSubject = card.getAttribute("data-s") || null;
+        us.cardsModule = null;
+        renderCardsPicker(main);
+      };
+    });
+    main.querySelectorAll(".modchip").forEach(function (chip) {
+      chip.onclick = function () {
+        us.cardsModule = chip.getAttribute("data-mod") || null;
+        renderCardsPicker(main);
+      };
+    });
+    main.querySelectorAll("#cardsmode button").forEach(function (b) {
+      b.onclick = function () {
+        us.cardsOnlyUnknown = b.getAttribute("data-v") === "unknown";
+        renderCardsPicker(main);
+      };
+    });
+    var sc = document.getElementById("startcards");
+    if (sc) sc.onclick = function () {
+      var r = Cards.startDeck({ subject: us.cardsSubject, module: us.cardsModule, onlyUnknown: us.cardsOnlyUnknown });
+      if (!r.ok) { UI.toast("No cards for that selection."); return; }
+      go("study");
+    };
+  }
+
+  function renderCardStudy(main) {
+    var s = App.cardSession;
+    if (!s) { go("cards"); return; }
+
+    // Completion screen (deck exhausted — session is finished but kept
+    // around until the user leaves, so the summary can be shown)
+    if (s.finished || !Cards.currentCard()) {
+      var knownN = s.knownCount, seenN = s.queue.length;
+      main.innerHTML =
+        '<div class="card scorewrap">' +
+          '<div style="font-size:3rem">🃏</div>' +
+          '<div class="verdict">Deck complete!</div>' +
+          '<div class="scoremeta">' + knownN + " card" + (knownN === 1 ? "" : "s") + " marked known · " + esc(s.subject ? Stats.shortSubject(s.subject) + (s.module ? " · " + s.module : "") : "All subjects") + "</div>" +
+          '<div class="row mt16" style="justify-content:center;gap:10px;flex-wrap:wrap">' +
+            '<button class="btn btn-primary" id="ca-again">Study again</button>' +
+            '<button class="btn btn-soft" id="ca-unknown">Unknown only</button>' +
+            '<button class="btn btn-ghost" id="ca-home">Done</button>' +
+          "</div>" +
+        "</div>";
+      document.getElementById("ca-again").onclick = function () {
+        Cards.exit();
+        Cards.startDeck({ subject: s.subject, module: s.module });
+        go("study"); route();
+      };
+      document.getElementById("ca-unknown").onclick = function () {
+        Cards.exit();
+        var r = Cards.startDeck({ subject: s.subject, module: s.module, onlyUnknown: true });
+        if (!r.ok) { UI.toast("Everything in this deck is already known 🎉"); go("cards"); return; }
+        go("study"); route();
+      };
+      document.getElementById("ca-home").onclick = function () { Cards.exit(); go("cards"); };
+      return;
+    }
+
+    var card = Cards.currentCard();
+    var remaining = s.queue.length - s.index;
+
+    var html =
+      '<div class="quizhead">' +
+        "<div><div class='mode'>Flashcards</div><div class='setname'>" + esc(s.subject ? Stats.shortSubject(s.subject) + (s.module ? " · " + s.module : "") : "All subjects") + "</div></div>" +
+        '<span class="progress-label">' + remaining + " left</span>" +
+      "</div>" +
+      '<div class="bar success" style="margin-bottom:18px"><i style="width:' + Math.round((s.knownCount / Math.max(1, s.queue.length)) * 100) + '%"></i></div>' +
+
+      '<button class="card3d" id="flipcard" aria-label="Flip card">' +
+        '<div class="cface cfront">' +
+          '<div class="clabel">' + esc(card.subject ? Stats.shortSubject(card.subject) : "") + " · " + esc(card.module || "") + "</div>" +
+          '<div class="ctext">' + esc(card.front) + "</div>" +
+          '<div class="cfliphint">tap to flip ↻</div>' +
+        "</div>" +
+        '<div class="cface cback">' +
+          '<div class="clabel ok">✓ ' + esc(card.module || "") + "</div>" +
+          '<div class="ctext">' + esc(card.back) + "</div>" +
+          (card.hint ? '<div class="chint">💡 ' + esc(card.hint) + "</div>" : "") +
+        "</div>" +
+      "</button>" +
+
+      '<div class="quizfoot">' +
+        '<button class="btn btn-danger" id="mark-again" style="flex:1">🔁 Still learning</button>' +
+        '<button class="btn btn-primary" id="mark-known" style="flex:1">✅ I know this</button>' +
+      "</div>" +
+      '<div style="margin-top:14px;text-align:center">' +
+        '<button class="btn btn-ghost" id="exitcards" style="font-size:.78rem;padding:7px 14px">End session</button>' +
+      "</div>";
+
+    main.innerHTML = html;
+
+    var flip = document.getElementById("flipcard");
+    flip.onclick = function () { flip.classList.toggle("flipped"); };
+
+    document.getElementById("mark-known").onclick = function () {
+      Cards.markCurrent(true);
+      route();
+    };
+    document.getElementById("mark-again").onclick = function () {
+      Cards.markCurrent(false);
+      route();
+    };
+    document.getElementById("exitcards").onclick = async function () {
+      var ok = await UI.confirmModal({
+        title: "End this deck?",
+        body: "Cards you marked as known stay known. The rest will be waiting next time.",
+        okText: "End session"
+      });
+      if (ok) { Cards.exit(); go("cards"); }
+    };
   }
 
   /* ══════════════════════════ TIPS ════════════════════════════ */
@@ -840,7 +1104,7 @@ window.App = window.App || {};
   /* ══════════════════════════ SETTINGS ════════════════════════ */
   function renderSettings(main) {
     var ov = Stats.overall();
-    var mats = Stats.materialSummary();
+    var subs = Stats.subjectSummary();
 
     var html = "<h2 style='font-size:1.2rem;margin:6px 2px 14px'>Settings ⚙️</h2>";
 
@@ -863,11 +1127,12 @@ window.App = window.App || {};
 
     html += '<div class="section-title">Question bank</div><div class="card">' +
       '<div class="formrow"><div class="lab">Questions loaded</div><span class="chip primary">' + ov.total + "</span></div>" +
-      '<div class="formrow"><div class="lab">Reviewers</div><span class="chip primary">' + mats.length + "</span></div>" +
-      mats.forEach(function (m) {
-        html += '<div class="formrow"><div class="lab" style="font-weight:600;font-size:.82rem">' + esc(m.material) + '</div><span class="chip">' + m.total + " Q</span></div>";
+      '<div class="formrow"><div class="lab">Flashcards loaded</div><span class="chip primary">' + Cards.all().length + "</span></div>" +
+      '<div class="formrow"><div class="lab">Subjects (PDFs)</div><span class="chip primary">' + subs.length + "</span></div>" +
+      subs.forEach(function (m) {
+        html += '<div class="formrow"><div class="lab" style="font-weight:600;font-size:.82rem">' + esc(m.subject) + '</div><span class="chip">' + m.total + " Q · " + m.moduleList.length + " mod</span></div>";
       }) +
-      '<p class="muted mt8">New reviewers appear automatically whenever <code>data/questions.js</code> is updated. If you don\'t see new questions, refresh the page twice (the app keeps an offline copy for you).</p>' +
+      '<p class="muted mt8">New subjects and modules appear automatically whenever <code>data/questions.js</code> / <code>data/flashcards.js</code> are updated. If you don\'t see them, refresh the page twice (the app keeps an offline copy for you).</p>' +
       "</div>";
 
     html += '<div class="card"><p class="muted">CPA Review Hub · progress lives privately in this browser on this device — nothing is sent to any server. Export regularly!</p></div>';
@@ -952,6 +1217,26 @@ window.App = window.App || {};
     if (k === "f" && s.mode === "exam") { Quiz.toggleFlag(); route(); e.preventDefault(); }
   });
 
+  // Flashcard shortcuts: Space flips, K = know, A = still learning
+  document.addEventListener("keydown", function (e) {
+    if (document.querySelector(".modal-overlay")) return;
+    var t = e.target;
+    if (t && (t.tagName === "INPUT" || t.tagName === "TEXTAREA" || t.tagName === "SELECT")) return;
+    if (currentRoute() !== "study") return;
+    if (!App.cardSession || App.cardSession.finished) return;
+    if (!Cards.currentCard()) return;
+
+    var k = e.key.toLowerCase();
+    if (k === " " || k === "enter") {
+      var f = document.getElementById("flipcard");
+      if (f) { f.classList.toggle("flipped"); e.preventDefault(); }
+    } else if (k === "k") {
+      Cards.markCurrent(true); route(); e.preventDefault();
+    } else if (k === "a") {
+      Cards.markCurrent(false); route(); e.preventDefault();
+    }
+  });
+
   /* ══════════════════════════ WAKE-UP CHECK ═══════════════════ */
   // If the phone locked / tab backgrounded through the exam deadline,
   // submit the moment the app becomes visible again.
@@ -973,6 +1258,12 @@ window.App = window.App || {};
   function boot() {
     App.state = Storage.loadState();
     App.session = Storage.loadSession();
+    App.cardSession = Cards.loadSession();
+    if (App.cardSession) {
+      // Drop cards that no longer exist in the deck data
+      App.cardSession.queue = App.cardSession.queue.filter(function (id) { return !!Cards.cardById(id); });
+      if (!App.cardSession.queue.length) { App.cardSession = null; Cards.saveSession(null); }
+    }
 
     // Drop session entries that reference questions no longer in the bank
     if (App.session) {
