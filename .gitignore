@@ -1,0 +1,13 @@
+# Raw study materials — NEVER push these to GitHub (copyright/privacy).
+# Only the processed questions in data/questions.js get committed.
+materials/
+
+# OS / editor noise
+.DS_Store
+Thumbs.db
+*.tmp
+.vscode/
+.idea/
+
+# Local test artifacts
+node_modules/

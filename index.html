@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>CPA Review Hub — Board Exam Quiz</title>
+  <meta name="description" content="Interactive CPA board exam reviewer: practice by PDF, timed mock exams, missed-question drills, streaks and progress stats.">
+  <meta name="theme-color" content="#6455d4">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icon.svg">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="shell">
+    <header class="topbar">
+      <a class="brand" href="#/dashboard">
+        <span class="logo">CPA</span>
+        <span>CPA Review Hub<small>Board exam quiz</small></span>
+      </a>
+      <nav class="topnav">
+        <a href="#/dashboard" data-route="dashboard">Home</a>
+        <a href="#/practice" data-route="practice">Practice</a>
+        <a href="#/exam" data-route="exam">Mock Exam</a>
+        <a href="#/drill" data-route="drill">Drill</a>
+        <a href="#/stats" data-route="stats">Stats</a>
+        <a href="#/tips" data-route="tips">Tips</a>
+        <a href="#/settings" data-route="settings">⚙️</a>
+      </nav>
+      <button class="iconbtn" id="theme-toggle" title="Toggle theme" aria-label="Toggle theme">🌙</button>
+    </header>
+
+    <main id="view" class="fadein"></main>
+
+    <nav class="bottomnav">
+      <a href="#/dashboard" data-route="dashboard"><span class="ico">🏠</span>Home</a>
+      <a href="#/practice" data-route="practice"><span class="ico">⚡</span>Practice</a>
+      <a href="#/exam" data-route="exam"><span class="ico">⏱️</span>Exam</a>
+      <a href="#/drill" data-route="drill"><span class="ico">🎯</span>Drill</a>
+      <a href="#/stats" data-route="stats"><span class="ico">📊</span>Stats</a>
+    </nav>
+  </div>
+
+  <div id="toast" role="status" aria-live="polite"></div>
+  <div id="modal-root"></div>
+
+  <script src="data/questions.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/stats.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/quiz.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
