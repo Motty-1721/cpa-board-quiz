@@ -5,11 +5,15 @@
  * processed into questions.
  *
  * ┌─────────────────────────────────────────────────────────────────┐
- * │ CONTENT RULE (non-negotiable):                                  │
- * │ Every question, choice, and explanation must derive STRICTLY    │
- * │ from the assigned PDF. Never add outside knowledge, never       │
- * │ invent questions about material the PDF doesn't cover.          │
- * │ The PDFs are the SOLE reference.                                │
+ * │ CONTENT RULES (non-negotiable):                                 │
+ * │ 1. STRICTLY FROM THE PDF: every question, choice, and           │
+ * │    explanation must derive from the assigned PDF alone. Never   │
+ * │    add outside knowledge; never cover material the PDF          │
+ * │    doesn't. The PDFs are the SOLE reference.                    │
+ * │ 2. COVERAGE MIX: every module must include THEORY, CONCEPTS,    │
+ * │    and TERMINOLOGY questions — definitions, classifications,    │
+ * │    true/false statements, name-that-term — alongside any        │
+ * │    computational/application items. The board tests both.       │
  * └─────────────────────────────────────────────────────────────────┘
  *
  * STRUCTURE: one PDF = one SUBJECT, divided into MODULES:

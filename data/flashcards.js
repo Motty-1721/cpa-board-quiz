@@ -4,8 +4,10 @@
  * Concept cards for quick recall drills. Same subject/module structure as
  * the question bank.
  *
- * CONTENT RULE: every card must derive STRICTLY from the assigned PDF —
- * the PDFs are the sole reference. No outside material.
+ * CONTENT RULES: every card must derive STRICTLY from the assigned PDF —
+ * the PDFs are the sole reference, no outside material. Prioritize
+ * theories, concepts, and terminologies: definitions, classifications,
+ * key terms, and rules — exactly the recall items flashcards are for.
  *
  * Schema:
  * {

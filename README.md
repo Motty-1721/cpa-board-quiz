@@ -6,9 +6,11 @@ subject**, divided into **modules**. She picks a subject and module to
 practice, drill, take exams with, or flip flashcards from — and everything
 (scores, streaks, mastery, weak topics) is saved privately in her browser.
 
-> **Content rule:** every question, explanation, and flashcard must derive
-> strictly from the assigned PDF — no outside material. The PDFs are the
-> sole reference.
+> **Content rules:** every question, explanation, and flashcard must derive
+> strictly from the assigned PDF — no outside material; the PDFs are the
+> sole reference. Every module must also include **theory, concepts, and
+> terminology** questions (definitions, classifications, true/false
+> statements) alongside computational items — the board tests both.
 
 ## For her (how to use)
 
