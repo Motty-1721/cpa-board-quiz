@@ -1,6 +1,7 @@
 # Raw study materials — NEVER push these to GitHub (copyright/privacy).
 # Only the processed questions in data/questions.js get committed.
 materials/
+PDF Materials/
 
 # OS / editor noise
 .DS_Store
