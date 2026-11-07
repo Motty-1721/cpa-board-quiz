@@ -358,9 +358,12 @@ window.App = window.App || {};
     // Effective pool: subject + selected modules (empty selection = all)
     var pool = subj ? Quiz.poolForModules(subj, mods) : Quiz.poolFor(null, null);
     var maxN = pool.length;
-    var countOpts = [30, 70, 100].filter(function (n) { return n <= maxN; });
-    if (!countOpts.length) countOpts = [maxN];
-    if (us.examCount > maxN || countOpts.indexOf(us.examCount) === -1) us.examCount = countOpts[countOpts.length - 1];
+    var baseOpts = [30, 70, 100];
+    if (maxN >= 30) {
+      if (baseOpts.indexOf(us.examCount) === -1 || us.examCount > maxN) us.examCount = 30;
+    } else {
+      us.examCount = maxN; // small bank: the exam is simply "all of them"
+    }
     var effCount = Math.min(us.examCount, maxN);
     var defaultMin = Math.ceil(effCount * 1.5);
     if (us.examMin == null || us.examMinFor !== effCount) { us.examMin = defaultMin; us.examMinFor = effCount; }
@@ -398,11 +401,22 @@ window.App = window.App || {};
       html += "</div></div>";
     }
 
+    // Count options: full 30/70/100 with future sizes visibly locked,
+    // or a single "All N" chip when the selection is smaller than 30.
+    var countBtns = "";
+    if (maxN >= 30) {
+      baseOpts.forEach(function (n) {
+        var locked = n > maxN;
+        countBtns += "<button data-n='" + n + "' class='" + (us.examCount === n ? "on" : "") + "'" +
+          (locked ? " disabled title='Unlocks when the question bank reaches " + n + " questions'" : "") + ">" + n + "</button>";
+      });
+    } else {
+      countBtns = "<button data-n='" + maxN + "' class='on' title='Every question in this selection'>" + "All " + maxN + "</button>";
+    }
+
     html += '<div class="card mt16">' +
-      '<div class="formrow"><div><div class="lab">Number of questions</div><div class="hint">' + maxN + ' available in this selection</div></div>' +
-        '<div class="seg" id="examcount">' +
-          countOpts.map(function (n) { return "<button data-n='" + n + "' class='" + (us.examCount === n ? "on" : "") + "'>" + n + "</button>"; }).join("") +
-        "</div></div>" +
+      '<div class="formrow"><div><div class="lab">Number of questions</div><div class="hint">' + maxN + " available in this selection</div></div>" +
+        '<div class="seg" id="examcount">' + countBtns + "</div></div>" +
       '<div class="formrow"><div><div class="lab">Time limit (minutes)</div><div class="hint">The real board allows about 1.5 minutes per question</div></div>' +
         '<input type="number" min="1" max="600" class="numinput" id="exammin" value="' + us.examMin + '">' +
       "</div>" +

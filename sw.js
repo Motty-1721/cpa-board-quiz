@@ -4,7 +4,7 @@
  * Pages load instantly from cache; fresh copies arrive on the next load.
  * Bump CACHE_VERSION whenever you want to force an update wave.
  */
-var CACHE_VERSION = "cpa-quiz-v3";
+var CACHE_VERSION = "cpa-quiz-v4";
 var CORE = [
   "./",
   "./index.html",
