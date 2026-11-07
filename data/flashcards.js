@@ -112,27 +112,146 @@ window.FLASHCARDS = [
     back: "Consent, object certain, and cause."
   },
 
-  // ── MS ───────────────────────────────────────────────────────
+  // ── MS — Pinnacle May 2027 handout ───────────────────────────
   {
-    id: "fc-ms-01",
+    id: "fc-ms-101",
     subject: "Management Services (MS)",
-    module: "Cost-Volume-Profit",
-    front: "Break-even point in units = ?",
-    back: "Fixed costs ÷ contribution margin per unit."
+    module: "Introduction to MS",
+    front: "Management accounting's major reporting standard?",
+    back: "RELEVANCE to the decision — no GAAP constraint (that's financial accounting)."
   },
   {
-    id: "fc-ms-02",
+    id: "fc-ms-102",
     subject: "Management Services (MS)",
-    module: "Cost-Volume-Profit",
-    front: "Margin of safety = ?",
-    back: "Actual (or budgeted) sales − break-even sales."
+    module: "Cost Concepts",
+    front: "Prime cost = ?  Conversion cost = ?",
+    back: "Prime = DM + DL. Conversion = DL + OH. Common element: direct labor."
   },
   {
-    id: "fc-ms-03",
+    id: "fc-ms-103",
     subject: "Management Services (MS)",
-    module: "Decision-Making",
-    front: "What makes a cost RELEVANT for decision-making?",
-    back: "It is a FUTURE cost that DIFFERS between alternatives (incremental/avoidable). Sunk and unavoidable costs are never relevant."
+    module: "Cost Concepts",
+    front: "The three manufacturing cost elements?",
+    back: "Direct materials, direct labor, manufacturing overhead (which includes indirect materials, indirect labor, factory depreciation/insurance/taxes/maintenance)."
+  },
+  {
+    id: "fc-ms-104",
+    subject: "Management Services (MS)",
+    module: "CVP Analysis",
+    front: "Break-even point in peso sales = ?",
+    back: "Fixed costs ÷ contribution margin ratio. (In units: FC ÷ CM per unit.)"
+  },
+  {
+    id: "fc-ms-105",
+    subject: "Management Services (MS)",
+    module: "Absorption vs. Variable Costing",
+    front: "Absorption vs. variable costing: how is fixed factory overhead treated?",
+    back: "Absorption (= full/conventional): PRODUCT cost. Variable (= direct): PERIOD cost."
+  },
+  {
+    id: "fc-ms-106",
+    subject: "Management Services (MS)",
+    module: "Absorption vs. Variable Costing",
+    front: "Production > sales → which costing shows higher net income?",
+    back: "ABSORPTION (fixed OH is deferred into ending inventory). Production < sales → absorption lower; equal → same."
+  },
+  {
+    id: "fc-ms-107",
+    subject: "Management Services (MS)",
+    module: "Standard Costing",
+    front: "MPV formula and who is responsible?",
+    back: "MPV = (actual price − standard price) × actual qty purchased — the PURCHASING AGENT. MQV (usage) is the production manager."
+  },
+  {
+    id: "fc-ms-108",
+    subject: "Management Services (MS)",
+    module: "Budgeting",
+    front: "Starting point of the master budget?",
+    back: "The SALES budget — it drives production, then materials/labor/overhead budgets."
+  },
+  {
+    id: "fc-ms-109",
+    subject: "Management Services (MS)",
+    module: "Relevant Costing",
+    front: "What makes a cost relevant?",
+    back: "It is a FUTURE cost that DIFFERS between alternatives. Sunk costs (e.g., book value of old equipment, joint costs at split-off) are never relevant."
+  },
+  {
+    id: "fc-ms-110",
+    subject: "Management Services (MS)",
+    module: "Responsibility Accounting",
+    front: "The four types of responsibility centers?",
+    back: "Revenue center (generates revenue), cost center (costs only), profit center (both), investment center (both + control over assets)."
+  },
+  {
+    id: "fc-ms-111",
+    subject: "Management Services (MS)",
+    module: "Responsibility Accounting",
+    front: "ROI and Residual Income formulas?",
+    back: "ROI = operating income ÷ average operating assets. RI = operating income − (minimum rate of return × operating assets)."
+  },
+  {
+    id: "fc-ms-112",
+    subject: "Management Services (MS)",
+    module: "Transfer Pricing",
+    front: "Transfer price ceiling and floor?",
+    back: "MAX = lowest external market price to the buying division. MIN = variable cost + opportunity cost (lost CM on outside sales, at full capacity)."
+  },
+  {
+    id: "fc-ms-113",
+    subject: "Management Services (MS)",
+    module: "Capital Budgeting",
+    front: "Which methods ignore the time value of money?",
+    back: "Payback period and accounting rate of return. DCF methods: NPV, profitability index, IRR."
+  },
+  {
+    id: "fc-ms-114",
+    subject: "Management Services (MS)",
+    module: "Cost of Capital",
+    front: "CAPM formula?",
+    back: "R = RF + β(RM − RF) — risk-free rate plus beta times the market risk premium."
+  },
+  {
+    id: "fc-ms-115",
+    subject: "Management Services (MS)",
+    module: "Financial Statement Analysis",
+    front: "Horizontal vs. vertical analysis?",
+    back: "Horizontal = TREND across periods (base year). Vertical = COMMON-SIZE within one statement (items as % of total assets or net sales)."
+  },
+  {
+    id: "fc-ms-116",
+    subject: "Management Services (MS)",
+    module: "Working Capital Management",
+    front: "Four motives for holding cash?",
+    back: "Transaction (day-to-day), precautionary (buffer), speculative (opportunities), contractual (e.g., compensating balance)."
+  },
+  {
+    id: "fc-ms-117",
+    subject: "Management Services (MS)",
+    module: "Working Capital Management",
+    front: "EOQ minimizes what — and its formula?",
+    back: "The sum of ORDERING + CARRYING costs: EOQ = √(2aD/k)."
+  },
+  {
+    id: "fc-ms-118",
+    subject: "Management Services (MS)",
+    module: "Quantitative Analysis",
+    front: "Critical path = ? Slack time = ?",
+    back: "Critical path = LONGEST path through the network (zero slack). Slack = time an activity can be delayed without delaying the project."
+  },
+  {
+    id: "fc-ms-119",
+    subject: "Management Services (MS)",
+    module: "Economics",
+    front: "ED > 1, ED = 1, ED < 1 mean?",
+    back: "Elastic, unit-elastic, inelastic. More substitutes / bigger income share / longer period = more elastic."
+  },
+  {
+    id: "fc-ms-120",
+    subject: "Management Services (MS)",
+    module: "Economics",
+    front: "Price ceiling below equilibrium? Price floor above?",
+    back: "Ceiling below → SHORTAGE. Floor above → SURPLUS."
   },
 
   // ── TAB ──────────────────────────────────────────────────────

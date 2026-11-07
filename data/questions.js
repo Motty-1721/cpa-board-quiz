@@ -292,88 +292,6 @@ window.QUESTION_BANK = [
     source: "Seed sample"
   },
 
-  // ═══════════════ SUBJECT: Management Services (MS) ═══════════════
-  {
-    id: "ms-001",
-    subject: "Management Services (MS)",
-    module: "Cost-Volume-Profit",
-    topic: "Break-Even Point",
-    question: "The break-even point in units is computed as:",
-    choices: [
-      "Fixed costs divided by contribution margin per unit",
-      "Fixed costs divided by selling price per unit",
-      "Total costs divided by variable cost per unit",
-      "Variable costs divided by contribution margin ratio"
-    ],
-    answer: 0,
-    explanation: "At break-even, total contribution margin exactly covers fixed costs. So units = Fixed Costs ÷ CM per unit, where CM per unit = selling price − variable cost per unit. Dividing fixed costs by selling price ignores variable costs and understates the break-even point.",
-    source: "Seed sample"
-  },
-  {
-    id: "ms-005",
-    subject: "Management Services (MS)",
-    module: "Cost-Volume-Profit",
-    topic: "Margin of Safety",
-    question: "The margin of safety in pesos is best described as:",
-    choices: [
-      "The excess of actual (or budgeted) sales over break-even sales",
-      "The difference between contribution margin and fixed costs at break-even",
-      "The ratio of variable costs to sales",
-      "The profit earned at the break-even point"
-    ],
-    answer: 0,
-    explanation: "Margin of safety = Actual (or budgeted) Sales − Break-even Sales. It measures how far sales can FALL before the company starts incurring losses. There is zero profit at break-even by definition.",
-    source: "Seed sample"
-  },
-  {
-    id: "ms-002",
-    subject: "Management Services (MS)",
-    module: "Decision-Making",
-    topic: "Relevant Costs",
-    question: "In a decision to accept or reject a special order, which cost is RELEVANT?",
-    choices: [
-      "Unavoidable fixed factory overhead allocated to each unit",
-      "The differential (incremental) cost of producing the additional units",
-      "Sunk costs already incurred for the existing production line",
-      "The original cost of machinery already purchased"
-    ],
-    answer: 1,
-    explanation: "Relevant costs are FUTURE costs that DIFFER between alternatives — i.e., incremental/avoidable costs. Sunk costs (already incurred) and unavoidable allocated fixed costs are never relevant to the special-order decision.",
-    source: "Seed sample"
-  },
-  {
-    id: "ms-003",
-    subject: "Management Services (MS)",
-    module: "Decision-Making",
-    topic: "Capital Budgeting",
-    question: "Using the net present value (NPV) method with the company's cost of capital as the discount rate, a project should be accepted when:",
-    choices: [
-      "NPV is positive or zero",
-      "NPV is negative",
-      "The payback period exceeds the project's useful life",
-      "The accounting rate of return equals the cost of capital"
-    ],
-    answer: 0,
-    explanation: "A positive NPV means the project earns MORE than the cost of capital, adding shareholder value; an NPV of exactly zero means it earns exactly the required return. Both are acceptable (positive NPV preferred). Negative NPV destroys value.",
-    source: "Seed sample"
-  },
-  {
-    id: "ms-004",
-    subject: "Management Services (MS)",
-    module: "Costing Systems",
-    topic: "Activity-Based Costing",
-    question: "Activity-based costing (ABC) differs from traditional costing mainly because ABC:",
-    choices: [
-      "Assigns overhead using multiple activity cost drivers rather than a single volume-based driver",
-      "Eliminates all fixed cost allocations",
-      "Uses only direct labor hours to apply overhead",
-      "Values inventory at market price instead of cost"
-    ],
-    answer: 0,
-    explanation: "ABC traces overhead to ACTIVITIES (e.g., machine setups, inspections, purchase orders) and assigns costs to products using the DRIVERS of those activities. Traditional costing typically uses one volume-based base like direct labor hours, which distorts costs in multi-product firms.",
-    source: "Seed sample"
-  },
-
   // ═══════════════ SUBJECT: Taxation (TAB) ═══════════════
   {
     id: "tab-001",
@@ -521,5 +439,1028 @@ window.QUESTION_BANK = [
     answer: 1,
     explanation: "Type 1 (adjusting) events — e.g., bankruptcy of a customer occurring after year-end over a receivable that existed at year-end — require ADJUSTMENT to the FS because they confirm conditions existing at the reporting date. Type 2 (non-adjusting) events arising AFTER the date require disclosure only.",
     source: "Seed sample"
+  },
+
+  // ═══════════════ SUBJECT: Management Services (MS) — Pinnacle May 2027 handout ═══════════════
+  {
+    id: "ms-101",
+    subject: "Management Services (MS)",
+    module: "Introduction to MS",
+    topic: "Purpose of Management Accounting",
+    question: "Management accounting is considered successful when it:",
+    choices: [
+      "Helps creditors evaluate the company's performance",
+      "Helps managers improve their decisions",
+      "Is accurate and reported annually",
+      "Conforms with generally accepted accounting principles"
+    ],
+    answer: 1,
+    explanation: "Management accounting serves INTERNAL users (managers). It succeeds when it improves managerial decisions — planning, directing, controlling, and decision-making. Accuracy and periodicity matter far less than relevance to the decision at hand.",
+    source: "Pinnacle MS handout (May 2027)"
+  },
+  {
+    id: "ms-102",
+    subject: "Management Services (MS)",
+    module: "Introduction to MS",
+    topic: "Financial vs. Management Accounting",
+    question: "Which of the following distinguishes management accounting from financial accounting?",
+    choices: [
+      "Management accounting reports are mandatory and prepared periodically",
+      "Management accounting is primarily for external users such as investors and creditors",
+      "Management accounting is not governed by GAAP and uses any measurement unit useful to the situation",
+      "Management accounting covers only the whole company rather than subunits"
+    ],
+    answer: 2,
+    explanation: "Financial accounting: external users, GAAP-based, mandatory, periodic, historical, whole-company, summarized. Management accounting: internal users, no GAAP constraint (relevance is the standard), optional yet vital, prepared whenever needed, forecast data, may cover any subunit in detail.",
+    source: "Pinnacle MS handout (May 2027)"
+  },
+  {
+    id: "ms-103",
+    subject: "Management Services (MS)",
+    module: "Introduction to MS",
+    topic: "Line and Staff Functions",
+    question: "In a typical organizational structure, which of the following is a STAFF function?",
+    choices: [
+      "Production supervisor",
+      "Sales director",
+      "Store manager",
+      "Human resources manager"
+    ],
+    answer: 3,
+    explanation: "Line functions are directly responsible for attaining objectives and interact with customers — production, sales, marketing. Staff functions provide specialized service and technical advice laterally or upward — finance/accounting, IT, human resources — and usually do not interact with customers.",
+    source: "Pinnacle MS handout (May 2027)"
+  },
+  {
+    id: "ms-104",
+    subject: "Management Services (MS)",
+    module: "Introduction to MS",
+    topic: "Functions of Management",
+    question: "The management function that involves evaluating whether actual performance conforms to planned goals, with feedback as its key, is:",
+    choices: [
+      "Planning",
+      "Directing",
+      "Controlling",
+      "Decision-making"
+    ],
+    answer: 2,
+    explanation: "Controlling compares actual performance against budgets/plans, monitors results, and triggers corrective action; feedback signals whether operations are on track. Planning sets goals; directing mobilizes people day-to-day; decision-making uses predictive (relevant) information.",
+    source: "Pinnacle MS handout (May 2027)"
+  },
+  {
+    id: "ms-105",
+    subject: "Management Services (MS)",
+    module: "Cost Concepts",
+    topic: "Prime and Conversion Cost",
+    question: "Prime cost and conversion cost share what common element?",
+    choices: [
+      "Direct materials",
+      "Direct labor",
+      "Manufacturing overhead",
+      "Selling expenses"
+    ],
+    answer: 1,
+    explanation: "Prime cost = direct materials + direct labor. Conversion cost = direct labor + manufacturing overhead (the costs of CONVERTING materials into finished goods). Direct labor appears in both.",
+    source: "Pinnacle MS handout (May 2027)"
+  },
+  {
+    id: "ms-106",
+    subject: "Management Services (MS)",
+    module: "Cost Concepts",
+    topic: "Manufacturing Overhead",
+    question: "Which of the following would NOT be classified as manufacturing overhead?",
+    choices: [
+      "Indirect labor",
+      "Indirect materials",
+      "Direct materials",
+      "Insurance on factory building"
+    ],
+    answer: 2,
+    explanation: "Manufacturing overhead consists of costs indirectly associated with manufacture: indirect materials, indirect labor, depreciation on factory buildings and machines, insurance, taxes, and maintenance on factory facilities. Direct materials are traced directly to the product.",
+    source: "Pinnacle MS handout (May 2027)"
+  },
+  {
+    id: "ms-107",
+    subject: "Management Services (MS)",
+    module: "Cost Concepts",
+    topic: "Cost Behavior",
+    question: "As activity level decreases, the fixed cost per unit will:",
+    choices: [
+      "Remain constant",
+      "Increase",
+      "Decrease proportionately",
+      "Vary directly with activity"
+    ],
+    answer: 1,
+    explanation: "Total fixed costs stay constant regardless of activity, so fixed cost per unit varies INVERSELY with activity: fewer units means each unit carries a larger share of the fixed cost. Variable cost per unit, in contrast, remains constant at every level.",
+    source: "Pinnacle MS handout (May 2027)"
+  },
+  {
+    id: "ms-108",
+    subject: "Management Services (MS)",
+    module: "Cost Concepts",
+    topic: "Regression Analysis",
+    question: "In cost analysis, the coefficient of determination (r²) measures:",
+    choices: [
+      "The slope of the regression line",
+      "The proportion of the variation in the dependent variable explained by the regression equation",
+      "Whether the relationship between variables is direct or inverse",
+      "The predicted value of the independent variable"
+    ],
+    answer: 1,
+    explanation: "r² is the 'goodness of fit' — the proportion of total variation in Y (cost) accounted for by the regression equation. The HIGHER the r², the more confidence one can have in the estimated cost formula. (The correlation coefficient r measures strength/direction; r² measures explained variation.)",
+    source: "Pinnacle MS handout (May 2027)"
+  },
+  {
+    id: "ms-109",
+    subject: "Management Services (MS)",
+    module: "Cost Concepts",
+    topic: "Mixed Cost Segregation",
+    question: "The method that separates a mixed cost into its fixed and variable components with the HIGHEST degree of precision is:",
+    choices: [
+      "High-low method",
+      "Scattergraph method",
+      "Least squares (regression analysis) method",
+      "Account analysis method"
+    ],
+    answer: 2,
+    explanation: "Least squares/regression determines the line of best fit by minimizing the sum of squared deviations, using ALL data points. High-low uses only two points; the scattergraph is visual and subjective.",
+    source: "Pinnacle MS handout (May 2027)"
+  },
+  {
+    id: "ms-110",
+    subject: "Management Services (MS)",
+    module: "CVP Analysis",
+    topic: "Break-Even Point Computation",
+    question: "A company has fixed costs of P500,000 and a contribution margin ratio of 40%. The break-even point in peso sales is:",
+    choices: ["P200,000", "P500,000", "P1,250,000", "P2,000,000"],
+    answer: 2,
+    explanation: "Break-even in peso = Fixed Costs ÷ CM Ratio = P500,000 ÷ 0.40 = P1,250,000. At this sales level, contribution margin (P500,000) exactly equals fixed costs — no profit, no loss.",
+    source: "Pinnacle MS handout (May 2027)"
+  },
+  {
+    id: "ms-111",
+    subject: "Management Services (MS)",
+    module: "CVP Analysis",
+    topic: "CVP Assumptions",
+    question: "Which of the following is an assumption underlying CVP analysis?",
+    choices: [
+      "Inventory levels change as production exceeds sales",
+      "The sales mix remains constant when multiple products are sold",
+      "Cost behavior is curvilinear throughout all activity levels",
+      "Fixed costs vary with each unit produced"
+    ],
+    answer: 1,
+    explanation: "CVP assumes: (1) costs and revenues behave linearly within the relevant range; (2) costs can be accurately classified as variable or fixed; (3) changes in activity are the only cost driver; (4) ALL units produced are sold (production = sales); and (5) with multiple products, the sales mix stays constant.",
+    source: "Pinnacle MS handout (May 2027)"
+  },
+  {
+    id: "ms-112",
+    subject: "Management Services (MS)",
+    module: "CVP Analysis",
+    topic: "Margin of Safety",
+    question: "The margin of safety indicates:",
+    choices: [
+      "The profit earned at the break-even point",
+      "The maximum amount by which sales could decline without incurring a loss",
+      "The excess of fixed costs over contribution margin",
+      "The ratio of variable costs to sales"
+    ],
+    answer: 1,
+    explanation: "Margin of safety = actual (or budgeted) sales − break-even sales. It tells management how far sales can FALL before the company slips into a loss — a cushion against downturns.",
+    source: "Pinnacle MS handout (May 2027)"
+  },
+  {
+    id: "ms-113",
+    subject: "Management Services (MS)",
+    module: "CVP Analysis",
+    topic: "Sales Mix and Operating Leverage",
+    question: "At any level of units sold, net income will be greater if the company sells:",
+    choices: [
+      "An equal mix of all products",
+      "Higher contribution margin units rather than lower contribution margin units",
+      "Lower contribution margin units to maximize total unit volume",
+      "Only the product with the highest selling price"
+    ],
+    answer: 1,
+    explanation: "A shift from low-margin to high-margin sales can INCREASE net income even if total units sold decline; conversely, shifting to low-margin units can decrease income even with more units sold. What matters is contribution margin, not unit count or price alone.",
+    source: "Pinnacle MS handout (May 2027)"
+  },
+  {
+    id: "ms-114",
+    subject: "Management Services (MS)",
+    module: "Absorption vs. Variable Costing",
+    topic: "Fixed Overhead Treatment",
+    question: "The costing method that treats fixed manufacturing overhead as a PERIOD cost is:",
+    choices: [
+      "Absorption costing",
+      "Full costing",
+      "Variable costing",
+      "Conventional costing"
+    ],
+    answer: 2,
+    explanation: "Variable costing (also called direct costing) includes only variable manufacturing costs in unit product cost and expenses fixed factory overhead immediately as a period cost. Absorption costing (= full or conventional costing) treats fixed factory overhead as a PRODUCT cost.",
+    source: "Pinnacle MS handout (May 2027)"
+  },
+  {
+    id: "ms-115",
+    subject: "Management Services (MS)",
+    module: "Absorption vs. Variable Costing",
+    topic: "Net Income Differences",
+    question: "When units produced EXCEED units sold, net income under absorption costing will be:",
+    choices: [
+      "Higher than under variable costing",
+      "Lower than under variable costing",
+      "Equal to variable costing",
+      "Indeterminable without knowing the sales price"
+    ],
+    answer: 0,
+    explanation: "With production > sales, part of fixed overhead is DEFERRED into ending inventory under absorption costing instead of being expensed immediately — so absorption income is higher. When production < sales, absorption income is lower; when production = sales, the two are equal.",
+    source: "Pinnacle MS handout (May 2027)"
+  },
+  {
+    id: "ms-116",
+    subject: "Management Services (MS)",
+    module: "Absorption vs. Variable Costing",
+    topic: "Advantages of Variable Costing",
+    question: "Which of the following is an advantage of variable costing for internal reporting?",
+    choices: [
+      "Net income is unaffected by changes in production levels",
+      "It is required by GAAP for external reporting",
+      "It defers fixed overhead into inventory",
+      "It matches all manufacturing costs against revenue when goods are sold"
+    ],
+    answer: 0,
+    explanation: "Under variable costing, net income is tied to SALES, not production — changes in production levels do not distort it. It is consistent with CVP and incremental analysis. However, GAAP requires ABSORPTION costing for external reporting.",
+    source: "Pinnacle MS handout (May 2027)"
+  },
+  {
+    id: "ms-117",
+    subject: "Management Services (MS)",
+    module: "Standard Costing",
+    topic: "Levels of Standards",
+    question: "Standards that represent optimum performance under PERFECT operating conditions are called:",
+    choices: [
+      "Normal standards",
+      "Ideal standards",
+      "Attainable standards",
+      "Practical standards"
+    ],
+    answer: 1,
+    explanation: "Ideal standards assume maximum efficiency — perfect operating conditions with no waste, downtime, or machine breakdowns. Normal standards represent efficient levels ATTAINABLE under expected operating conditions and are more widely used because they allow for normal waste and downtime.",
+    source: "Pinnacle MS handout (May 2027)"
+  },
+  {
+    id: "ms-118",
+    subject: "Management Services (MS)",
+    module: "Standard Costing",
+    topic: "Materials Variances",
+    question: "The purchasing agent is generally held responsible for the:",
+    choices: [
+      "Material quantity variance",
+      "Material price variance",
+      "Labor efficiency variance",
+      "Volume variance"
+    ],
+    answer: 1,
+    explanation: "MPV = (actual price − standard price) × actual quantity purchased. The purchasing agent controls the PRICE paid. The PRODUCTION manager answers for the material quantity variance (control over materials usage) and the labor variances.",
+    source: "Pinnacle MS handout (May 2027)"
+  },
+  {
+    id: "ms-119",
+    subject: "Management Services (MS)",
+    module: "Standard Costing",
+    topic: "Variance Computation",
+    question: "Using the formula MPV = (actual price − standard price) × actual quantity purchased: actual price is P11, standard price is P10, and 5,000 units were purchased. The materials price variance is:",
+    choices: [
+      "P5,000 unfavorable",
+      "P5,000 favorable",
+      "P50,000 unfavorable",
+      "P55,000 favorable"
+    ],
+    answer: 0,
+    explanation: "MPV = (P11 − P10) × 5,000 = P5,000. Actual price EXCEEDS standard price, so the variance is UNFAVORABLE — the company paid P1 more per unit than planned.",
+    source: "Pinnacle MS handout (May 2027)"
+  },
+  {
+    id: "ms-120",
+    subject: "Management Services (MS)",
+    module: "Standard Costing",
+    topic: "Labor Variances",
+    question: "The labor efficiency variance is computed as:",
+    choices: [
+      "(Actual rate − standard rate) × actual hours",
+      "(Actual hours − standard hours) × standard rate",
+      "(Actual hours − standard hours) × actual rate",
+      "(Actual rate − standard rate) × standard hours"
+    ],
+    answer: 1,
+    explanation: "LEV = (actual hours − standard hours) × standard RATE — efficiency is about time used, priced at the standard rate. The rate variance uses prices: LRV = (actual rate − standard rate) × actual HOURS.",
+    source: "Pinnacle MS handout (May 2027)"
+  },
+  {
+    id: "ms-121",
+    subject: "Management Services (MS)",
+    module: "Budgeting",
+    topic: "Master Budget",
+    question: "The STARTING POINT in preparing the master budget is the:",
+    choices: [
+      "Production budget",
+      "Cash budget",
+      "Sales budget",
+      "Direct materials purchases budget"
+    ],
+    answer: 2,
+    explanation: "The master budget begins with the SALES budget — expected sales drive how many units must be produced (production budget), which in turn drives materials, labor, and overhead budgets. The cash budget and budgeted income statement come later.",
+    source: "Pinnacle MS handout (May 2027)"
+  },
+  {
+    id: "ms-122",
+    subject: "Management Services (MS)",
+    module: "Budgeting",
+    topic: "Cash Budget",
+    question: "The three sections of a cash budget are:",
+    choices: [
+      "Sales, production, and financing",
+      "Cash receipts, cash disbursements, and financing",
+      "Revenues, expenses, and net income",
+      "Beginning cash, collections, and borrowing"
+    ],
+    answer: 1,
+    explanation: "The cash budget contains (a) cash receipts, (b) cash disbursements, and (c) financing. Because cash is so vital to survival, it is often considered the most important financial budget.",
+    source: "Pinnacle MS handout (May 2027)"
+  },
+  {
+    id: "ms-123",
+    subject: "Management Services (MS)",
+    module: "Budgeting",
+    topic: "Budgeting Approaches",
+    question: "A budget and planning process requiring each manager to justify a department's entire budget from a base of ZERO every period is called:",
+    choices: [
+      "Kaizen budgeting",
+      "Life-cycle budgeting",
+      "Zero-based budgeting",
+      "Continuous budgeting"
+    ],
+    answer: 2,
+    explanation: "Zero-based budgeting starts each period from zero — every program must be re-justified, not merely incremented from last year. Kaizen assumes continuous small improvements; life-cycle budgets estimate a product's revenues and expenses over its entire life; a continuous (rolling) budget always covers the next twelve months.",
+    source: "Pinnacle MS handout (May 2027)"
+  },
+  {
+    id: "ms-124",
+    subject: "Management Services (MS)",
+    module: "Budgeting",
+    topic: "Production Budget",
+    question: "Budgeted sales are 10,000 units, desired ending finished goods inventory is 2,000 units, and beginning finished goods inventory is 1,500 units. Required production is:",
+    choices: ["10,500 units", "11,500 units", "12,000 units", "9,500 units"],
+    answer: 0,
+    explanation: "Required production = budgeted sales + desired ending FG − beginning FG = 10,000 + 2,000 − 1,500 = 10,500 units.",
+    source: "Pinnacle MS handout (May 2027)"
+  },
+  {
+    id: "ms-125",
+    subject: "Management Services (MS)",
+    module: "Budgeting",
+    topic: "Flexible Budgets",
+    question: "A flexible budget is best described as:",
+    choices: [
+      "A budget that is never revised once approved",
+      "A series of static budgets at different levels of activity",
+      "A budget prepared from a base of zero each period",
+      "A budget that covers a rolling twelve-month period"
+    ],
+    answer: 1,
+    explanation: "A flexible budget projects data for VARIOUS activity levels — in essence a series of static budgets. It is appropriate for performance evaluation because both actual and budgeted costs are compared at the ACTUAL activity level achieved.",
+    source: "Pinnacle MS handout (May 2027)"
+  },
+  {
+    id: "ms-126",
+    subject: "Management Services (MS)",
+    module: "Relevant Costing",
+    topic: "Relevant Costs",
+    question: "Costs that are expected to differ under each alternative course of action are:",
+    choices: [
+      "Sunk costs",
+      "Relevant costs",
+      "Joint costs",
+      "Shutdown costs"
+    ],
+    answer: 1,
+    explanation: "Relevant costs are FUTURE costs expected to be DIFFERENT between alternatives. Sunk costs were incurred in the past and are never relevant; joint costs are sunk at the split-off point; shutdown costs continue even after discontinuing a segment.",
+    source: "Pinnacle MS handout (May 2027)"
+  },
+  {
+    id: "ms-127",
+    subject: "Management Services (MS)",
+    module: "Relevant Costing",
+    topic: "Special Orders",
+    question: "A company should ACCEPT a special order when:",
+    choices: [
+      "The order price exceeds full cost per unit including allocated fixed costs",
+      "Additional revenue from the order exceeds additional cost, and regular market sales will not be affected",
+      "The company is operating at full capacity",
+      "The order price covers only the allocated portion of fixed costs"
+    ],
+    answer: 1,
+    explanation: "The decision rule for special orders: accept when incremental revenue exceeds incremental (mostly variable) cost, PROVIDED regular sales are not affected. At FULL capacity, the order would displace regular sales and is usually rejected. Fixed costs are generally irrelevant.",
+    source: "Pinnacle MS handout (May 2027)"
+  },
+  {
+    id: "ms-128",
+    subject: "Management Services (MS)",
+    module: "Relevant Costing",
+    topic: "Sell or Process Further",
+    question: "In a sell-or-process-further decision, costs incurred BEFORE the split-off point are:",
+    choices: [
+      "Relevant and should be allocated to each product",
+      "Sunk costs and irrelevant to the decision",
+      "Avoidable costs that favor processing further",
+      "Opportunity costs of processing further"
+    ],
+    answer: 1,
+    explanation: "Joint costs are incurred before the split-off point — by then they are already sunk and irrelevant. The rule: process further only if the INCREMENTAL revenue beyond split-off exceeds the further processing costs.",
+    source: "Pinnacle MS handout (May 2027)"
+  },
+  {
+    id: "ms-129",
+    subject: "Management Services (MS)",
+    module: "Relevant Costing",
+    topic: "Retain or Replace Equipment",
+    question: "In deciding whether to retain or replace equipment, the book value of the OLD equipment is:",
+    choices: [
+      "A relevant cost that favors replacement",
+      "A sunk cost that does not affect the decision",
+      "An avoidable cost that favors retaining",
+      "An opportunity cost of replacement"
+    ],
+    answer: 1,
+    explanation: "Book value of the old asset is a SUNK cost — it cannot be changed by any present or future decision. The relevant items are the effects on variable costs, the cost of the new equipment, and any disposal value of the old asset.",
+    source: "Pinnacle MS handout (May 2027)"
+  },
+  {
+    id: "ms-130",
+    subject: "Management Services (MS)",
+    module: "Relevant Costing",
+    topic: "Scarce Resources",
+    question: "When a resource is scarce, products should be ranked and produced according to:",
+    choices: [
+      "Highest selling price per unit",
+      "Highest contribution margin per unit of the SCARCE (limited) resource",
+      "Highest total contribution margin per unit",
+      "Lowest variable cost per unit"
+    ],
+    answer: 1,
+    explanation: "With a binding constraint, the key metric is contribution margin per unit of LIMITING resource — that maximizes total contribution margin from whatever capacity exists. Products with the highest CM per machine hour, for example, are produced first.",
+    source: "Pinnacle MS handout (May 2027)"
+  },
+  {
+    id: "ms-131",
+    subject: "Management Services (MS)",
+    module: "Responsibility Accounting",
+    topic: "Responsibility Centers",
+    question: "A responsibility center that incurs costs, generates revenues, AND controls the assets used in its operations is a(n):",
+    choices: [
+      "Cost center",
+      "Revenue center",
+      "Profit center",
+      "Investment center"
+    ],
+    answer: 3,
+    explanation: "The four centers form a hierarchy: revenue centers generate revenues; cost centers incur costs only; profit centers do both; and INVESTMENT centers additionally have authority over the assets deployed — making ROI and residual income their natural performance measures.",
+    source: "Pinnacle MS handout (May 2027)"
+  },
+  {
+    id: "ms-132",
+    subject: "Management Services (MS)",
+    module: "Responsibility Accounting",
+    topic: "ROI",
+    question: "Return on investment (ROI) for an investment center is computed as:",
+    choices: [
+      "Net income ÷ sales",
+      "Operating income ÷ average operating assets",
+      "Contribution margin ÷ controllable fixed costs",
+      "Sales ÷ average operating assets"
+    ],
+    answer: 1,
+    explanation: "ROI = operating income ÷ average operating assets, where operating income is earnings before interest and taxes. Patterned after the DuPont technique, ROI = return on sales × asset turnover.",
+    source: "Pinnacle MS handout (May 2027)"
+  },
+  {
+    id: "ms-133",
+    subject: "Management Services (MS)",
+    module: "Responsibility Accounting",
+    topic: "Residual Income",
+    question: "Residual income (RI) is best described as:",
+    choices: [
+      "Operating income ÷ average operating assets",
+      "The excess of operating income over the minimum required return on operating assets",
+      "Contribution margin less controllable fixed costs",
+      "After-tax operating income less the weighted average cost of capital"
+    ],
+    answer: 1,
+    explanation: "RI = operating income − (minimum rate of return × operating assets). It measures income ABOVE the required floor. EVA is a more specific version that uses the after-tax WACC applied to total assets less noninterest-bearing current liabilities.",
+    source: "Pinnacle MS handout (May 2027)"
+  },
+  {
+    id: "ms-134",
+    subject: "Management Services (MS)",
+    module: "Responsibility Accounting",
+    topic: "Decentralization",
+    question: "When one segment takes action that benefits itself but is detrimental to the company as a whole, the situation is called:",
+    choices: [
+      "Goal congruence",
+      "Sub-optimization",
+      "Management by exception",
+      "Decentralization"
+    ],
+    answer: 1,
+    explanation: "Sub-optimization occurs when a unit optimizes its own results at the expense of the firm. Goal congruence — units working toward a common interest — is the opposite, and is exactly what a well-designed responsibility system motivates.",
+    source: "Pinnacle MS handout (May 2027)"
+  },
+  {
+    id: "ms-135",
+    subject: "Management Services (MS)",
+    module: "Transfer Pricing",
+    topic: "Transfer Price Defined",
+    question: "The price charged by one segment of a firm for goods or services supplied to another segment of the SAME firm is the:",
+    choices: [
+      "Market price",
+      "Distress price",
+      "Transfer price",
+      "Outlay price"
+    ],
+    answer: 2,
+    explanation: "A transfer price is the internal charge between segments of one company. Its objectives: facilitate optimal decision-making, provide a basis for measuring divisional performance, and motivate department heads.",
+    source: "Pinnacle MS handout (May 2027)"
+  },
+  {
+    id: "ms-136",
+    subject: "Management Services (MS)",
+    module: "Transfer Pricing",
+    topic: "Transfer Price Limits",
+    question: "The MAXIMUM transfer price should be no greater than:",
+    choices: [
+      "The selling segment's full cost of production",
+      "The lowest market price at which the buying segment can acquire the goods externally",
+      "The selling segment's variable cost plus a normal markup",
+      "The highest price the buying segment can negotiate"
+    ],
+    answer: 1,
+    explanation: "Ceiling: the buying division would never pay more internally than it could buy for outside (lowest external market price). Floor: the selling division's incremental (variable) cost PLUS the opportunity cost of facilities used. Transfers are worthwhile when the minimum is below the maximum.",
+    source: "Pinnacle MS handout (May 2027)"
+  },
+  {
+    id: "ms-137",
+    subject: "Management Services (MS)",
+    module: "Transfer Pricing",
+    topic: "Capacity and Opportunity Cost",
+    question: "When the selling division is operating at FULL capacity, the minimum transfer price should include:",
+    choices: [
+      "Only the variable cost per unit",
+      "Variable cost per unit plus the lost contribution margin per unit on outside sales",
+      "Only fixed cost per unit",
+      "The full cost per unit without any markup"
+    ],
+    answer: 1,
+    explanation: "At full capacity, every unit transferred internally sacrifices an outside sale — that lost contribution margin IS the opportunity cost. Minimum price = variable cost per unit + lost CM per unit on outside sales.",
+    source: "Pinnacle MS handout (May 2027)"
+  },
+  {
+    id: "ms-138",
+    subject: "Management Services (MS)",
+    module: "Transfer Pricing",
+    topic: "Pricing Approaches",
+    question: "Which transfer pricing basis is often considered the BEST approach because it is objective and provides proper economic incentives?",
+    choices: [
+      "Cost-based transfer price",
+      "Market-based transfer price",
+      "Arbitrary transfer price",
+      "Full cost plus standard markup"
+    ],
+    answer: 1,
+    explanation: "Market-based prices are objective and align divisional decisions with economic reality. Cost-based prices tend to pass the seller's inefficiencies to the buyer and give the selling division no incentive to control costs.",
+    source: "Pinnacle MS handout (May 2027)"
+  },
+  {
+    id: "ms-139",
+    subject: "Management Services (MS)",
+    module: "Capital Budgeting",
+    topic: "Cash Flows",
+    question: "In capital budgeting, depreciation expense is added back to net income when computing net annual cash flow because:",
+    choices: [
+      "Depreciation reduces the project's cost",
+      "Depreciation is an expense that does not require a cash outflow",
+      "Depreciation is a relevant sunk cost",
+      "Depreciation increases the required rate of return"
+    ],
+    answer: 1,
+    explanation: "Capital budgeting uses estimated CASH flows, not accrual income. Depreciation is a noncash expense — it reduces net income but uses no cash — so it is added back: net annual cash flow = net income + depreciation.",
+    source: "Pinnacle MS handout (May 2027)"
+  },
+  {
+    id: "ms-140",
+    subject: "Management Services (MS)",
+    module: "Capital Budgeting",
+    topic: "Payback Period",
+    question: "A major limitation of the cash payback technique is that it:",
+    choices: [
+      "Is difficult to compute and understand",
+      "Ignores the expected profitability of the project and the time value of money",
+      "Requires estimating the cost of capital",
+      "Cannot be used when annual cash flows are equal"
+    ],
+    answer: 1,
+    explanation: "Payback = cost of investment ÷ net annual cash flow (equal flows). It is easy to use and highlights liquidity/obsolescence risk, but it ignores what happens AFTER payback (profitability) and disregards the time value of money — so it should not be the sole basis for a decision.",
+    source: "Pinnacle MS handout (May 2027)"
+  },
+  {
+    id: "ms-141",
+    subject: "Management Services (MS)",
+    module: "Capital Budgeting",
+    topic: "NPV and IRR",
+    question: "The internal rate of return (IRR) is best described as the interest rate that:",
+    choices: [
+      "The company must pay to obtain funds from creditors and stockholders",
+      "Causes the present value of expected net cash flows to equal the cost of the investment",
+      "Is equal to the company's cost of capital",
+      "Is imputed by government regulation"
+    ],
+    answer: 1,
+    explanation: "IRR is the project's own yield — the discount rate at which NPV = 0 (PV of inflows equals the investment). Decision rule: accept when IRR ≥ the required rate of return. The company's cost of capital is the usual discount rate for NPV, not the IRR itself.",
+    source: "Pinnacle MS handout (May 2027)"
+  },
+  {
+    id: "ms-142",
+    subject: "Management Services (MS)",
+    module: "Capital Budgeting",
+    topic: "Profitability Index",
+    question: "The profitability index is computed by dividing:",
+    choices: [
+      "Initial investment by the payback period",
+      "Present value of future cash flows by the initial investment",
+      "Net income by average investment",
+      "Net annual cash flow by the cost of the investment"
+    ],
+    answer: 1,
+    explanation: "PI = PV of future cash flows ÷ initial investment. It is useful when choosing among MUTUALLY EXCLUSIVE projects or when resources are limited, because it considers both the size of the investment and the discounted returns. Higher PI = more desirable.",
+    source: "Pinnacle MS handout (May 2027)"
+  },
+  {
+    id: "ms-143",
+    subject: "Management Services (MS)",
+    module: "Cost of Capital",
+    topic: "WACC",
+    question: "The weighted average cost of capital (WACC) represents the:",
+    choices: [
+      "Average coupon rate on the company's outstanding bonds",
+      "Overall cost of capital from ALL of the organization's financing sources",
+      "Cost of issuing new securities through investment bankers",
+      "Dividend rate the company must pay on equity securities"
+    ],
+    answer: 1,
+    explanation: "WACC blends the after-tax costs of each capital component — long-term debt, preferred stock, and common equity — weighted by their share of the capital structure. Accounts payable and accruals are NOT capital components for WACC purposes.",
+    source: "Pinnacle MS handout (May 2027)"
+  },
+  {
+    id: "ms-144",
+    subject: "Management Services (MS)",
+    module: "Cost of Capital",
+    topic: "CAPM",
+    question: "Using CAPM: the risk-free rate is 6%, the market risk premium is 5%, and the stock's beta is 1.2. The cost of equity is:",
+    choices: ["10.0%", "11.0%", "12.0%", "13.2%"],
+    answer: 2,
+    explanation: "CAPM: R = RF + β × (RM − RF) = 6% + 1.2 × 5% = 6% + 6% = 12%. Beta measures the stock's volatility relative to the market; the risk-free rate is proxied by government securities.",
+    source: "Pinnacle MS handout (May 2027)"
+  },
+  {
+    id: "ms-145",
+    subject: "Management Services (MS)",
+    module: "Cost of Capital",
+    topic: "Component Costs",
+    question: "When computing the cost of capital, which statement is correct?",
+    choices: [
+      "Interest on debt requires tax adjustment because it is tax deductible; preferred dividends do not",
+      "Preferred dividends are tax deductible, so no adjustment is needed",
+      "Both debt interest and preferred dividends are tax deductible",
+      "Neither debt interest nor preferred dividends affect the cost of capital"
+    ],
+    answer: 0,
+    explanation: "Interest is tax deductible, so the cost of debt uses the AFTER-TAX rate — which lowers WACC. Preferred stock dividends are paid from after-tax income and are NOT deductible. Flotation costs (e.g., on new common stock) increase the cost of that component.",
+    source: "Pinnacle MS handout (May 2027)"
+  },
+  {
+    id: "ms-146",
+    subject: "Management Services (MS)",
+    module: "Cost of Capital",
+    topic: "Cost of New Common Equity",
+    question: "In the dividend growth (DDM) formula, the cost of NEW common stock differs from the cost of retained earnings because new stock:",
+    choices: [
+      "Uses a higher growth rate",
+      "Deducts flotation costs from the current price",
+      "Is not affected by dividends",
+      "Has a beta of zero"
+    ],
+    answer: 1,
+    explanation: "Cost of retained earnings = (D1 ÷ P0) + G. For NEW common stock, flotation costs reduce the net proceeds: (D1 ÷ [P0 × (1 − flotation cost)]) + G — making new equity MORE expensive than retained earnings.",
+    source: "Pinnacle MS handout (May 2027)"
+  },
+  {
+    id: "ms-147",
+    subject: "Management Services (MS)",
+    module: "Financial Statement Analysis",
+    topic: "Tools of Analysis",
+    question: "Horizontal analysis is also known as:",
+    choices: [
+      "Common-size analysis",
+      "Ratio analysis",
+      "Trend analysis",
+      "Vertical analysis"
+    ],
+    answer: 2,
+    explanation: "Horizontal (trend) analysis evaluates financial data over a SERIES of periods — a base year is selected and changes are expressed as amounts or percentages of the base. Vertical (common-size) analysis expresses each item as a percent of a base amount within ONE statement.",
+    source: "Pinnacle MS handout (May 2027)"
+  },
+  {
+    id: "ms-148",
+    subject: "Management Services (MS)",
+    module: "Financial Statement Analysis",
+    topic: "Liquidity Ratios",
+    question: "The acid-test (quick) ratio differs from the current ratio because it:",
+    choices: [
+      "Includes inventory in the numerator",
+      "Relates only cash, short-term investments, and net receivables to current liabilities",
+      "Uses total liabilities instead of current liabilities",
+      "Measures solvency rather than liquidity"
+    ],
+    answer: 1,
+    explanation: "The acid-test excludes inventory (and prepayments) — it relates only the most liquid assets (cash, marketable securities, net receivables) to current liabilities, indicating IMMEDIATE liquidity. Both are liquidity (short-term debt-paying ability) measures.",
+    source: "Pinnacle MS handout (May 2027)"
+  },
+  {
+    id: "ms-149",
+    subject: "Management Services (MS)",
+    module: "Financial Statement Analysis",
+    topic: "Turnover Ratios",
+    question: "Inventory turnover is computed by dividing cost of goods sold by:",
+    choices: [
+      "Ending inventory",
+      "Beginning inventory",
+      "Average inventory",
+      "Net sales"
+    ],
+    answer: 2,
+    explanation: "Inventory turnover = COGS ÷ AVERAGE merchandise inventory — it measures how many times inventory is sold (replaced) during the period. Average days in inventory = 360 days ÷ inventory turnover.",
+    source: "Pinnacle MS handout (May 2027)"
+  },
+  {
+    id: "ms-150",
+    subject: "Management Services (MS)",
+    module: "Financial Statement Analysis",
+    topic: "Solvency Ratios",
+    question: "Times interest earned is computed by dividing income BEFORE interest expense and income taxes by:",
+    choices: [
+      "Total assets",
+      "Interest expense",
+      "Net sales",
+      "Total liabilities"
+    ],
+    answer: 1,
+    explanation: "Times interest earned (interest coverage) = EBIT ÷ interest expense — it gauges the company's ability to meet interest payments as they come due, a key SOLVENCY measure.",
+    source: "Pinnacle MS handout (May 2027)"
+  },
+  {
+    id: "ms-151",
+    subject: "Management Services (MS)",
+    module: "Working Capital Management",
+    topic: "Motives for Holding Cash",
+    question: "Holding cash to provide a buffer against unexpected contingencies reflects the:",
+    choices: [
+      "Transaction motive",
+      "Precautionary motive",
+      "Speculative motive",
+      "Contractual motive"
+    ],
+    answer: 1,
+    explanation: "The four motives: TRANSACTION (normal day-to-day payments), PRECAUTIONARY (safety buffer for contingencies), SPECULATIVE (grabbing unexpected business/investment opportunities), and CONTRACTUAL (e.g., compensating balances required by banks).",
+    source: "Pinnacle MS handout (May 2027)"
+  },
+  {
+    id: "ms-152",
+    subject: "Management Services (MS)",
+    module: "Working Capital Management",
+    topic: "Economic Order Quantity",
+    question: "The economic order quantity (EOQ) is the order size that minimizes:",
+    choices: [
+      "The sum of ordering costs and carrying costs",
+      "Total purchasing cost of inventory",
+      "Safety stock levels",
+      "The lead time for orders"
+    ],
+    answer: 0,
+    explanation: "EOQ = √(2aD/k), where a = cost per order, D = annual demand, k = annual carrying cost per unit. It balances ORDERING costs (fall with bigger orders) against CARRYING costs (rise with bigger orders). Its assumptions: constant demand, constant lead time, instantaneous delivery, no quantity discounts.",
+    source: "Pinnacle MS handout (May 2027)"
+  },
+  {
+    id: "ms-153",
+    subject: "Management Services (MS)",
+    module: "Working Capital Management",
+    topic: "Reorder Point",
+    question: "When safety stock is required, the reorder point equals:",
+    choices: [
+      "Normal lead time usage only",
+      "Safety stock plus normal lead time usage",
+      "Economic order quantity less safety stock",
+      "Maximum usage less average usage"
+    ],
+    answer: 1,
+    explanation: "Reorder point = safety stock + normal lead time usage (equivalently, maximum lead time × average usage). Safety stock = (maximum lead time − normal lead time) × average usage — protection against running out before delivery.",
+    source: "Pinnacle MS handout (May 2027)"
+  },
+  {
+    id: "ms-154",
+    subject: "Management Services (MS)",
+    module: "Working Capital Management",
+    topic: "Financing Policies",
+    question: "The working capital financing policy that uses short-term liabilities to finance part or all of PERMANENT current asset requirements is:",
+    choices: [
+      "Matching approach",
+      "Conservative approach",
+      "Aggressive approach",
+      "Neutral approach"
+    ],
+    answer: 2,
+    explanation: "Aggressive policy runs on minimal working capital — short-term funds finance temporary AND part of permanent current assets (higher risk, lower cost). Conservative finances almost everything with long-term capital (lower risk, higher cost). Matching aligns financing maturity with asset life.",
+    source: "Pinnacle MS handout (May 2027)"
+  },
+  {
+    id: "ms-155",
+    subject: "Management Services (MS)",
+    module: "Working Capital Management",
+    topic: "Five C's of Credit",
+    question: "In credit evaluation, the 'C' that refers to the customer's willingness to pay is:",
+    choices: [
+      "Capacity",
+      "Character",
+      "Capital",
+      "Collateral"
+    ],
+    answer: 1,
+    explanation: "The Five C's: CHARACTER (willingness to pay), CAPACITY (ability to generate cash flows), CAPITAL (financial sources), CONDITIONS (economic environment), and COLLATERAL (assets pledged).",
+    source: "Pinnacle MS handout (May 2027)"
+  },
+  {
+    id: "ms-156",
+    subject: "Management Services (MS)",
+    module: "Quantitative Analysis",
+    topic: "Critical Path",
+    question: "In a PERT network, the critical path is the:",
+    choices: [
+      "Shortest path through the network",
+      "Longest path through the network",
+      "Path with the most activities",
+      "Path with the highest cost"
+    ],
+    answer: 1,
+    explanation: "The critical path is the LONGEST path — it determines the minimum total project time; any delay along it delays the whole project. PERT uses probabilistic time estimates, while CPM uses deterministic times plus crash cost concepts.",
+    source: "Pinnacle MS handout (May 2027)"
+  },
+  {
+    id: "ms-157",
+    subject: "Management Services (MS)",
+    module: "Quantitative Analysis",
+    topic: "Slack Time",
+    question: "Slack time in project scheduling is:",
+    choices: [
+      "The time an activity can be delayed without delaying the entire project",
+      "The crash time of an activity",
+      "The difference between crash time and normal time",
+      "The expected time of the critical path"
+    ],
+    answer: 0,
+    explanation: "Slack is scheduling leeway — the length of time a NON-critical activity can slip without forcing a delay to the whole project. Critical path activities have zero slack. Crash time is the rushed duration using all available resources (at crash cost).",
+    source: "Pinnacle MS handout (May 2027)"
+  },
+  {
+    id: "ms-158",
+    subject: "Management Services (MS)",
+    module: "Quantitative Analysis",
+    topic: "Expected Value",
+    question: "The expected value of a decision alternative is found by:",
+    choices: [
+      "Choosing the outcome with the highest payoff",
+      "Multiplying each outcome's probability by its payoff and summing the products",
+      "Averaging the best and worst outcomes",
+      "Dividing total payoff by the number of outcomes"
+    ],
+    answer: 1,
+    explanation: "Expected value = Σ (probability × payoff) across all possible outcomes — the probability-weighted average. It is central to decision-making under RISK (known probabilities); under UNCERTAINTY the probabilities themselves are unknown.",
+    source: "Pinnacle MS handout (May 2027)"
+  },
+  {
+    id: "ms-159",
+    subject: "Management Services (MS)",
+    module: "Quantitative Analysis",
+    topic: "Learning Curve",
+    question: "The learning curve concept states that:",
+    choices: [
+      "The cumulative average time per unit decreases by a certain percentage each time production doubles",
+      "Total production time doubles as output doubles",
+      "Productivity decreases with experience",
+      "Marginal cost is constant across all output levels"
+    ],
+    answer: 0,
+    explanation: "With experience comes productivity: each time CUMULATIVE production doubles, the cumulative average time per unit falls by a fixed percentage (and the incremental unit time also falls). Gains accrue at a DECREASING rate.",
+    source: "Pinnacle MS handout (May 2027)"
+  },
+  {
+    id: "ms-160",
+    subject: "Management Services (MS)",
+    module: "Quantitative Analysis",
+    topic: "Linear Programming",
+    question: "The linear programming technique especially useful when a problem involves MORE THAN TWO variables is the:",
+    choices: [
+      "Graphic method",
+      "Simplex method",
+      "High-low method",
+      "Regression method"
+    ],
+    answer: 1,
+    explanation: "Linear programming optimizes an objective (maximize profit or minimize cost) subject to constraints. The GRAPHIC method handles only two variables; the SIMPLEX method handles more. It is ideal for resource-allocation decisions with scarce inputs.",
+    source: "Pinnacle MS handout (May 2027)"
+  },
+  {
+    id: "ms-161",
+    subject: "Management Services (MS)",
+    module: "Economics",
+    topic: "Law of Demand",
+    question: "The Law of Demand states that, ceteris paribus:",
+    choices: [
+      "The higher the price, the greater the quantity supplied",
+      "The higher the price of a good, the smaller the quantity demanded",
+      "Quantity demanded is independent of price",
+      "Demand increases as income increases"
+    ],
+    answer: 1,
+    explanation: "Price and quantity demanded are inversely related, for two reasons: the SUBSTITUTION effect (higher relative price raises the opportunity cost, pushing buyers to alternatives) and the INCOME effect (higher price reduces what consumers can afford).",
+    source: "Pinnacle MS handout (May 2027)"
+  },
+  {
+    id: "ms-162",
+    subject: "Management Services (MS)",
+    module: "Economics",
+    topic: "Inferior Goods",
+    question: "Which of the following describes an INFERIOR good?",
+    choices: [
+      "Demand increases as consumer income increases",
+      "Demand increases as consumer income decreases",
+      "Demand is unaffected by income",
+      "Demand falls when its substitute's price rises"
+    ],
+    answer: 1,
+    explanation: "For inferior goods (e.g., instant noodles, sardines), demand moves INVERSELY with income — consumers buy more of them when money is short. NORMAL goods move directly with income.",
+    source: "Pinnacle MS handout (May 2027)"
+  },
+  {
+    id: "ms-163",
+    subject: "Management Services (MS)",
+    module: "Economics",
+    topic: "Elasticity",
+    question: "If the elasticity of demand is GREATER than 1, demand is said to be:",
+    choices: [
+      "Inelastic",
+      "Unit-elastic",
+      "Elastic",
+      "Perfectly inelastic"
+    ],
+    answer: 2,
+    explanation: "ED > 1 = elastic (quantity demanded is sensitive to price); ED = 1 = unitary; ED < 1 = inelastic. Demand tends to be MORE elastic when there are more substitutes, when the good takes a larger share of income, and over longer time periods — luxuries are more elastic than necessities.",
+    source: "Pinnacle MS handout (May 2027)"
+  },
+  {
+    id: "ms-164",
+    subject: "Management Services (MS)",
+    module: "Economics",
+    topic: "Market Equilibrium",
+    question: "A price ceiling set BELOW the equilibrium price will result in:",
+    choices: [
+      "A surplus",
+      "A shortage",
+      "Market equilibrium",
+      "An increase in supply"
+    ],
+    answer: 1,
+    explanation: "Below equilibrium, quantity demanded exceeds quantity supplied → SHORTAGE (and upward price pressure that the ceiling blocks). A price FLOOR set above equilibrium creates a SURPLUS. Equilibrium itself is the market-clearing state with no shortage or surplus.",
+    source: "Pinnacle MS handout (May 2027)"
+  },
+  {
+    id: "ms-165",
+    subject: "Management Services (MS)",
+    module: "Economics",
+    topic: "Consumption and Saving",
+    question: "The marginal propensity to consume (MPC) and marginal propensity to save (MPS) always sum to:",
+    choices: ["50%", "100%", "0%", "A value that depends on income"]
+    ,
+    answer: 1,
+    explanation: "Each additional peso of disposable income is either spent or saved, so MPC + MPS = 100%. MPC is the share of each additional peso spent; MPS is the share saved.",
+    source: "Pinnacle MS handout (May 2027)"
   }
 ];
