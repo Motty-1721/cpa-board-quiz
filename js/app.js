@@ -11,7 +11,7 @@ window.App = window.App || {};
   // Transient (non-persisted) UI selections, e.g. chosen subject/module on setup screens
   App.uiState = {
     practiceSubject: null, practiceModule: null, practiceCount: 10,
-    examSubject: null, examModule: null, examCount: 30, examMin: null,
+    examSubject: null, examModules: [], examCount: 30, examMin: null,
     cardsSubject: null, cardsModule: null, cardsOnlyUnknown: false,
     showGrid: false, reviewMode: false
   };
@@ -144,8 +144,12 @@ window.App = window.App || {};
   }
 
   function scopeLabel(s) {
-    if (!s) return "All subjects";
-    return Stats.shortSubject(s.subject) + (s.module ? " · " + s.module : "");
+    if (!s || !s.subject) return "All subjects";
+    var base = Stats.shortSubject(s.subject);
+    if (s.modules && s.modules.length === 1) return base + " · " + s.modules[0];
+    if (s.modules && s.modules.length > 1) return base + " · " + s.modules.length + " modules";
+    if (s.module) return base + " · " + s.module;
+    return base;
   }
 
   /* ══════════════════════════ DASHBOARD ══════════════════════ */
@@ -335,23 +339,34 @@ window.App = window.App || {};
       "</button>";
   }
 
+  // A toggleable module pill for the exam multi-select
+  function moduleToggleChip(mod, label, total, isOn) {
+    return '<button class="modchip toggle' + (isOn ? " on" : "") + '" data-mod="' + esc(mod) + '">' +
+      '<span class="ml">' + (isOn ? "✓ " : "") + esc(label) + "</span>" +
+      '<span class="mc">' + total + " Q</span>" +
+      "</button>";
+  }
+
   /* ══════════════════════════ EXAM SETUP ═════════════════════ */
   function renderExamSetup(main) {
     if (!Q().length) { emptyBank(main); return; }
     var us = App.uiState;
     var subj = us.examSubject;
-    var mod = us.examModule;
-    var counts = poolCounts(subj, mod);
-    var maxN = counts.total;
-    var countOpts = [30, 60, 90].filter(function (n) { return n <= maxN; });
+    var mods = us.examModules || [];   // [] = all modules of the subject
+    if (!us.examModules) us.examModules = [];
+
+    // Effective pool: subject + selected modules (empty selection = all)
+    var pool = subj ? Quiz.poolForModules(subj, mods) : Quiz.poolFor(null, null);
+    var maxN = pool.length;
+    var countOpts = [30, 70, 100].filter(function (n) { return n <= maxN; });
     if (!countOpts.length) countOpts = [maxN];
-    if (us.examCount > maxN) us.examCount = countOpts[countOpts.length - 1];
+    if (us.examCount > maxN || countOpts.indexOf(us.examCount) === -1) us.examCount = countOpts[countOpts.length - 1];
     var effCount = Math.min(us.examCount, maxN);
     var defaultMin = Math.ceil(effCount * 1.5);
     if (us.examMin == null || us.examMinFor !== effCount) { us.examMin = defaultMin; us.examMinFor = effCount; }
 
     var html = "<h2 style='font-size:1.2rem;margin:6px 2px 14px'>Mock exam mode ⏱️</h2>" +
-      '<p class="muted" style="margin:-8px 2px 16px">A simulation of the real thing — pick a subject, set the clock, and review everything at the end. The CPA board passing mark is 75%.</p>';
+      '<p class="muted" style="margin:-8px 2px 16px">A simulation of the real thing — pick the material, set the clock, and review everything at the end. The CPA board passing mark is 75%.</p>';
 
     html += '<div class="section-title" style="margin-top:0">1 · Choose subject</div><div class="setlist" id="setlist">';
     [null].concat(subjectList()).forEach(function (s) {
@@ -368,16 +383,23 @@ window.App = window.App || {};
     html += "</div>";
 
     if (subj) {
-      html += '<div class="section-title">2 · Choose module</div><div class="card"><div class="modrowlist">';
-      html += moduleChip(null, "All modules", poolCounts(subj, null), mod === null);
+      var modCounts = {};
       moduleList(subj).forEach(function (m) {
-        html += moduleChip(m, m, poolCounts(subj, m), mod === m);
+        modCounts[m] = Quiz.poolForModules(subj, [m]).length;
+      });
+      var allOn = mods.length === 0;
+      var scopeNote = allOn ? "All modules included" : mods.length + " of " + moduleList(subj).length + " modules selected";
+      html += '<div class="section-title">2 · Choose modules <span class="muted" style="font-weight:600;text-transform:none;letter-spacing:0">(' + scopeNote + " — tap to toggle)</span></div>" +
+        '<div class="card"><div class="modrowlist">';
+      html += moduleToggleChip("__ALL__", allOn ? "All modules" : "Select all", maxN, allOn);
+      moduleList(subj).forEach(function (m) {
+        html += moduleToggleChip(m, m, modCounts[m], mods.indexOf(m) !== -1);
       });
       html += "</div></div>";
     }
 
     html += '<div class="card mt16">' +
-      '<div class="formrow"><div><div class="lab">Number of questions</div></div>' +
+      '<div class="formrow"><div><div class="lab">Number of questions</div><div class="hint">' + maxN + ' available in this selection</div></div>' +
         '<div class="seg" id="examcount">' +
           countOpts.map(function (n) { return "<button data-n='" + n + "' class='" + (us.examCount === n ? "on" : "") + "'>" + n + "</button>"; }).join("") +
         "</div></div>" +
@@ -393,14 +415,23 @@ window.App = window.App || {};
     main.querySelectorAll(".setcard").forEach(function (card) {
       card.onclick = function () {
         us.examSubject = card.getAttribute("data-s") || null;
-        us.examModule = null;
+        us.examModules = [];
         us.examMin = null;
         renderExamSetup(main);
       };
     });
-    main.querySelectorAll(".modchip").forEach(function (chip) {
+    main.querySelectorAll(".modchip.toggle").forEach(function (chip) {
       chip.onclick = function () {
-        us.examModule = chip.getAttribute("data-mod") || null;
+        var m = chip.getAttribute("data-mod");
+        if (m === "__ALL__") {
+          us.examModules = [];                       // all modules
+        } else {
+          var i = us.examModules.indexOf(m);
+          if (i === -1) us.examModules.push(m);
+          else us.examModules.splice(i, 1);          // toggle off
+          // Selecting every module individually == all
+          if (us.examModules.length === moduleList(us.examSubject).length) us.examModules = [];
+        }
         us.examMin = null;
         renderExamSetup(main);
       };
@@ -420,7 +451,7 @@ window.App = window.App || {};
     };
     document.getElementById("startexam").onclick = function () {
       var min = parseInt(document.getElementById("exammin").value, 10) || Math.ceil(effCount * 1.5);
-      var r = Quiz.startSession({ mode: "exam", subject: us.examSubject, module: us.examModule, count: us.examCount, minutes: min });
+      var r = Quiz.startSession({ mode: "exam", subject: us.examSubject, modules: us.examModules, count: us.examCount, minutes: min });
       if (!r.ok) { UI.toast("No questions available for that selection."); return; }
       go("quiz");
     };

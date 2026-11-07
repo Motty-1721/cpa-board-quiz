@@ -30,14 +30,32 @@ window.App = window.App || {};
     });
   }
 
+  // Pool restricted to an explicit list of modules (empty list = all modules)
+  function poolForModules(subject, modules) {
+    if (!modules || !modules.length) return poolFor(subject, null);
+    return Q().filter(function (q) {
+      var subjOk = !subject || (q.subject || "Unsorted") === subject;
+      var modOk = modules.indexOf(q.module || "General") !== -1;
+      return subjOk && modOk;
+    });
+  }
+
+  function isUnseen(q) {
+    var st = App.state.questionStats[q.id];
+    return !(st && st.seen > 0);
+  }
+
   /* ── Start a session ────────────────────────────────────────── */
-  // opts: { mode, subject (null = all subjects), module (null = all modules), count, minutes }
+  // opts: { mode, subject (null = all subjects), module (single, practice/drill),
+  //         modules (array, exam multi-select; empty = all), count, minutes }
   function startSession(opts) {
     var pool;
     if (opts.mode === "drill") {
       pool = App.Stats.drillPool();
       if (opts.subject) pool = pool.filter(function (q) { return (q.subject || "Unsorted") === opts.subject; });
       if (opts.module) pool = pool.filter(function (q) { return (q.module || "General") === opts.module; });
+    } else if (opts.mode === "exam") {
+      pool = poolForModules(opts.subject, opts.modules);
     } else {
       pool = poolFor(opts.subject, opts.module);
     }
@@ -45,14 +63,31 @@ window.App = window.App || {};
     if (!pool.length) return { ok: false, reason: "empty" };
 
     var count = opts.count && opts.count > 0 ? Math.min(opts.count, pool.length) : pool.length;
-    var picked = shuffle(pool).slice(0, count);
+
+    // NO-REPEAT POLICY for practice: unseen questions come first (shuffled),
+    // then already-seen ones least-recently-served — so she always gets fresh
+    // questions and nothing repeats until the whole pool has cycled.
+    var picked;
+    if (opts.mode === "practice") {
+      var unseen = shuffle(pool.filter(isUnseen));
+      var seenQs = pool.filter(function (q) { return !isUnseen(q); })
+        .sort(function (a, b) {
+          var la = (App.state.questionStats[a.id] || {}).lastSeen || 0;
+          var lb = (App.state.questionStats[b.id] || {}).lastSeen || 0;
+          return la - lb;
+        });
+      picked = unseen.concat(seenQs).slice(0, count);
+    } else {
+      picked = shuffle(pool).slice(0, count);
+    }
 
     var now = Date.now();
     App.session = {
       id: "q" + now,
       mode: opts.mode,
       subject: opts.subject || null,
-      module: opts.module || null,
+      module: opts.mode === "exam" ? null : (opts.module || null),
+      modules: opts.mode === "exam" ? (opts.modules || []) : null,
       qids: picked.map(function (q) { return q.id; }),
       index: 0,
       answers: {},   // qid -> chosen index
@@ -200,6 +235,8 @@ window.App = window.App || {};
   App.Quiz = {
     shuffle: shuffle,
     poolFor: poolFor,
+    poolForModules: poolForModules,
+    isUnseen: isUnseen,
     startSession: startSession,
     currentQuestion: currentQuestion,
     isLast: isLast,

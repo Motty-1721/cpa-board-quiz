@@ -17,9 +17,9 @@ practice, drill, take exams with, or flip flashcards from — and everything
 | Feature | What it does |
 |---|---|
 | 🏠 **Home** | Streak, progress per subject, focus areas, recent activity |
-| ⚡ **Practice** | Pick **subject → module** → instant feedback + explanation per question |
+| ⚡ **Practice** | Pick **subject → module** → instant feedback + explanation. Fresh questions first — nothing repeats until the whole pool has been used |
 | 🃏 **Cards** | Flashcards per subject/module — flip, then mark **Know it** or **Still learning** (unknown cards return until learned) |
-| ⏱️ **Mock Exam** | Timed simulation on any subject/module (default 1.5 min/question), full review after, 75% = passing |
+| ⏱️ **Mock Exam** | Pick a subject, **toggle any combination of modules** (or all), choose 30/70/100 questions, set the clock — full review after, 75% = passing |
 | 🎯 **Drill** | Every question answered wrong comes back until answered right **twice in a row** (mastered 🏆) |
 | 📊 **Stats** | Score trend, consistency heatmap, accuracy per subject (with module detail) |
 | 💡 **Tips** | Study techniques, mock-exam strategy, exam-day checklist |
